@@ -1,0 +1,40 @@
+
+gui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+textField
+  rotate: false
+  xy: 1, 1
+  size: 500, 50
+  orig: 500, 50
+  offset: 0, 0
+  index: -1
+button1-down
+  rotate: false
+  xy: 503, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button1-over
+  rotate: false
+  xy: 503, 17
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button1
+  rotate: false
+  xy: 521, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 521, 17
+  size: 2, 16
+  orig: 2, 16
+  offset: 0, 0
+  index: -1
