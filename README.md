@@ -23,3 +23,9 @@ Creo que deberia ser vertical en lugar de horizontal como te puse en el splash p
 * Luego va a **Splash**
 * Luego va a **MenuScreen**
 * Y uego va debe ir a **GameScreen** que aun no pongo pero en un rato ya pongo
+
+
+##Otros programas que debes bajarte:
+
+* Hiero
+* Tiled
