@@ -163,7 +163,10 @@ public class JoinGameScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		stage.dispose();
+		haloFont.dispose();
+		white36nonoFont.dispose();
+		halo48orangeFont.dispose();
 		
 	}
 
