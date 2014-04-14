@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="200" tilewidth="16" tileheight="16">
+
+ <tileset firstgid="65" name="mariotles" tilewidth="16" tileheight="16">
+  <image source="mariotles.png" trans="ff00ff" width="464" height="448"/>
+ </tileset>
+
+ <layer name="Background" width="50" height="200">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMA6DBI65/l8FzKNhLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/gGo1yAk
+  </data>
+ </layer>
+ <layer name="ladrillos" width="50" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt20sOgCAMBcBeTbn/nVy7IP7QNjKTvD3toqQkRAAAAABAxNIJAAAAAAAAVLAOCgBU4S4DmM+ovSY7bXRjErQ4X0dGvVfO9pcAAAAAAFTR+3d/lJnpFzxzd+6YVwDwPnctAABQxdfviPYcAAAAAAAAAAAAAACAvQ3Nkz52
+  </data>
+ </layer>
+ <objectgroup name="B2D" width="50" height="200">
+  <object name="Borde" type="object" x="10" y="15">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+   <polyline points="0,0 790,-5 790,3181 -5,3186 0,-5"/>
+  </object>
+  <object name="piso1" x="9" y="1186" width="794" height="68">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="piso2" type="object" x="269" y="1052" width="235" height="21">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="piso3" type="object" x="447" y="914" width="288" height="16">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
