@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="50" height="200" tilewidth="16" tileheight="16">
-
- <tileset firstgid="65" name="mariotles" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="mariotles" tilewidth="16" tileheight="16">
   <image source="mariotles.png" trans="ff00ff" width="464" height="448"/>
  </tileset>
-
- <layer name="Background" width="50" height="200">
+ <layer name="Background" width="50" height="200" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztwwEJAAAMA6DBI65/l8FzKNhLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/gGo1yAk
+   eJztwwEJAAAMA6DBI6x/18FzKNhLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/gHo+FuO
   </data>
  </layer>
- <layer name="ladrillos" width="50" height="200">
+ <layer name="ladrillos" width="50" height="200" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt20sOgCAMBcBeTbn/nVy7IP7QNjKTvD3toqQkRAAAAABAxNIJAAAAAAAAVLAOCgBU4S4DmM+ovSY7bXRjErQ4X0dGvVfO9pcAAAAAAFTR+3d/lJnpFzxzd+6YVwDwPnctAABQxdfviPYcAAAAAAAAAAAAAACAvQ3Nkz52
+   eJzt20sOgCAMBcAq97+zaxfEH9pGZpK3p12UlIQIAAAAAIhYOgEAAAAAAIAK1kEBgCrcZQDzGbXXZKeNbkyCFufryKj3ytn+EgAAAACAKnr/7o8yM/2CZ+7OHfMKAN7nrgUAAKr4+h3RngMAAAAAAAAAAAAAALC3AbzkAbY=
   </data>
  </layer>
  <objectgroup name="B2D" width="50" height="200">

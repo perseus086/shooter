@@ -92,7 +92,7 @@ public class MenuScreen implements Screen{
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Boton!");
+				game.setScreen(new GameScreen(game));
 			}
 		});
 		

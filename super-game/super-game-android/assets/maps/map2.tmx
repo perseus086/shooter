@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="45" height="80" tilewidth="16" tileheight="16" backgroundcolor="#151680">
+ <tileset firstgid="1" name="marioTiles" tilewidth="16" tileheight="16">
+  <image source="../../../../../../../../GAME 1/SPRITES/mariotles.png" trans="ff00ff" width="464" height="448"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="45" height="80">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMA6Dx/h1WdT2Ogr2kqqqqqqqqqqqqqqqqquqrAyMz2Ik=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 2" width="45" height="80">
+  <object name="Borde" type="object" x="0" y="0" width="720" height="1280">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Piso1" type="object" x="66" y="1125" width="464" height="41">
+   <properties>
+    <property name="objectType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Piso2" type="object" x="298" y="994" width="388" height="41">
+   <properties>
+    <property name="objectType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Piso3" type="object" x="71" y="879" width="344" height="38">
+   <properties>
+    <property name="objectType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Piso4" type="object" x="325" y="764" width="355" height="57">
+   <properties>
+    <property name="objectType" value="StaticBody"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
