@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="45" height="80">
   <data encoding="base64" compression="zlib">
-   eJztwwEJAAAMA6Dx/h1WdT2Ogr2kqqqqqqqqqqqqqqqqquqrAyMz2Ik=
+   eJzt07EJADAMA0Gj/XfwqkmbPoFgDnS9mu9UNQAAAAAAAAAAo+xd5/OMz/CLPOgnugcAAAA4LMZglrM=
   </data>
  </layer>
  <objectgroup name="Object Layer 2" width="45" height="80">

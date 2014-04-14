@@ -24,7 +24,6 @@ public class GameScreen implements Screen {
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	
-	
 	public GameScreen(Game game){
 		this.game = game;
 		System.out.println("Game Screen");
@@ -41,7 +40,10 @@ public class GameScreen implements Screen {
 		
 		Box2DMapObjectParser parser = new Box2DMapObjectParser(1);
 		parser.load(world, map);
-		camera.translate(0, 0);
+		
+		camera.translate(363, 457);
+		camera.zoom = 26.3f;
+		
 		renderer = new OrthogonalTiledMapRenderer(map, parser.getUnitScale());
 
 	}
