@@ -9,29 +9,44 @@
   </data>
  </layer>
  <objectgroup name="Object Layer 2" width="45" height="80">
-  <object name="Borde" type="object" x="0" y="0" width="720" height="1280">
+  <object name="Piso1" type="object" x="64" y="1120" width="464" height="47">
    <properties>
     <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
-  <object name="Piso1" type="object" x="64" y="1120" width="464" height="48">
-   <properties>
-    <property name="objectType" value="StaticBody"/>
-   </properties>
-  </object>
   <object name="Piso2" type="object" x="298" y="994" width="388" height="41">
    <properties>
-    <property name="objectType" value="StaticBody"/>
+    <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
   <object name="Piso3" type="object" x="71" y="879" width="344" height="38">
    <properties>
-    <property name="objectType" value="StaticBody"/>
+    <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
   <object name="Piso4" type="object" x="325" y="764" width="355" height="57">
    <properties>
-    <property name="objectType" value="StaticBody"/>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Wall1" type="object" x="-116" y="0" width="118" height="1274">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Wall2" type="object" x="-118" y="-104" width="960" height="106">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Wall3" type="object" x="718" y="4" width="126" height="1278">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+  </object>
+  <object name="Wall4" type="object" x="-122" y="1276" width="972" height="74">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
  </objectgroup>
