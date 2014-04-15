@@ -47,7 +47,10 @@ public class GameScreen implements Screen {
 		
 		// Current player
 		currentAvatar = new Avatar(true);
-		currentAvatar.createObject(world);
+		currentAvatar.createObject(new Vector2(30,100),world);
+		
+		// Enemies
+		(new Avatar(false)).createObject(new Vector2(50,100), world);
 		
 		// Contact listener
 		world.setContactListener(new MapContactListener());
