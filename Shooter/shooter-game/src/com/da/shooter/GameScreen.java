@@ -69,6 +69,7 @@ public class GameScreen implements Screen {
 		Box2DMapObjectParser parser = new Box2DMapObjectParser(Box2DConstants.TILED_UNIT_SCALE);
 		parser.load(world, map);
 		for (Body body : parser.getBodies().values()) {
+			String name = (String)body.getUserData();
 			new Platform(body);
 		}
 		
@@ -156,7 +157,6 @@ public class GameScreen implements Screen {
 	}
 
 }
-
 
 //Box2D constants
 interface Box2DConstants{

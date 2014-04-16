@@ -7,7 +7,7 @@ public class MyShooterGame extends Game {
 	
 	@Override
 	public void create() {		
-		this.setScreen(new Splash(this));
+		this.setScreen(new GameScreen(this));// Splash(this));
 	}
 
 	@Override
