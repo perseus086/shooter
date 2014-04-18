@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -44,7 +45,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 		body = Box2DUtils.createPolygonBody(world, AvatarConstants.FIXTURE_BODY, initPosition, 2f, 5f, 5f, 5f, 0f,true,false,true);
 
 		// Foot
-		Box2DUtils.addSensorFixture(body,AvatarConstants.FIXTURE_FOOT,1f,1f,new Vector2(0f, -4.2f),0);
+		Box2DUtils.addSensorFixture(body,AvatarConstants.FIXTURE_FOOT,1.9f,1f,new Vector2(0f, -4.2f),0);
 		
 		// Sword
 		createSword();
@@ -64,6 +65,9 @@ public class Avatar implements Element,Comparable<Avatar>{
 		Vector2 position = this.getBody().getPosition().cpy();
 		position.add(0, 2);
 		Body swordBody = Box2DUtils.createPolygonBody(this.getBody().getWorld(), AvatarConstants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, false, false);
+		MassData massData = new MassData();
+		massData.mass = 1000;
+//		swordBody.setMassData(massData);
 		this.bodies.put(AvatarConstants.BODY_SWORD,swordBody);
 
 		// Revolute joint
@@ -127,7 +131,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 	
 	public void strike(){
 		this.status = AvatarConstants.STATUS_STRIKING;
-		this.bodies.get(AvatarConstants.BODY_SWORD).applyTorque(((direction)?-1:1)*9000f, true);
+		this.bodies.get(AvatarConstants.BODY_SWORD).applyTorque(((direction)?-1:1)*90000f, true);
 //		this.fixtures.get(AvatarConstants.FIXTURE_SWORD).
 	}
 	
@@ -191,14 +195,14 @@ public class Avatar implements Element,Comparable<Avatar>{
 	@Override
 	public void render() {
 		Body swordBody = this.bodies.get(AvatarConstants.BODY_SWORD);
-		if(Math.abs(swordBody.getAngle()) > 1.55){
+		if(Math.abs(swordBody.getAngle()) >= Math.PI/2.0){
 			this.status = AvatarConstants.STATUS_NONE;
 		}
 		
 		switch (this.status) {
 			case AvatarConstants.STATUS_NONE:
 				swordBody.setAngularVelocity(0);
-				swordBody.setTransform(swordBody.getPosition(), 0);
+				swordBody.setTransform(swordBody.getPosition(), ((this.direction)?-1:1)*(float)(Math.PI/8.0));
 			break;
 			default:
 			break;
