@@ -13,4 +13,6 @@ public interface Element {
 	 * @return the body
 	 */
 	Body getBody();
+
+	void render();
 }

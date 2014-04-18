@@ -3,6 +3,7 @@ package com.da.shooter.utils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -49,18 +50,19 @@ public class Box2DUtils {
         return body;
 	}
 	
-	public static void addSensorFixture(Body body,Object userData,float width, float height,Vector2 center){
+	public static Fixture addSensorFixture(Body body,Object userData,float width, float height,Vector2 center,float angle){
 		FixtureDef fixtureDef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width, height, center,0);
+		shape.setAsBox(width, height, center,angle);
         fixtureDef.shape = shape;
         
 //        fixtureDef.density = density;
 //        fixtureDef.friction = friction;  
 //        fixtureDef.restitution = restitu/tion;
         fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef).setUserData(userData);;
-        
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(userData);;
+        return fixture;
 	}
 	
 	/**

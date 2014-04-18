@@ -1,6 +1,7 @@
 package com.da.shooter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.dermetfan.utils.libgdx.box2d.Box2DMapObjectParser;
@@ -17,8 +18,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ContactFilter;
+import com.badlogic.gdx.physics.box2d.DestructionListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.da.shooter.elements.Avatar;
+import com.da.shooter.elements.Element;
 import com.da.shooter.elements.MapContactListener;
 import com.da.shooter.elements.Platform;
 
@@ -26,12 +32,12 @@ public class GameScreen implements Screen {
 
 	private Game game;
 	
-	
 	// Box2D
 	private World world;
 	private Box2DDebugRenderer box2DRenderer;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	private List<Body> bodiesToDestroy;
 	
 	// Avatars
 	private List<Avatar> avatars;
@@ -39,6 +45,7 @@ public class GameScreen implements Screen {
 	
 	public GameScreen(Game game){
 		this.game = game;
+		this.bodiesToDestroy = new ArrayList<Body>();
 		System.out.println("Game Screen");
 	}
 	
@@ -53,7 +60,7 @@ public class GameScreen implements Screen {
 		(new Avatar(false)).createObject(new Vector2(50,100), world);
 		
 		// Contact listener
-		world.setContactListener(new MapContactListener());
+		world.setContactListener(new MapContactListener(this));
 	}
 	
 	@Override
@@ -69,7 +76,6 @@ public class GameScreen implements Screen {
 		Box2DMapObjectParser parser = new Box2DMapObjectParser(Box2DConstants.TILED_UNIT_SCALE);
 		parser.load(world, map);
 		for (Body body : parser.getBodies().values()) {
-			String name = (String)body.getUserData();
 			new Platform(body);
 		}
 		
@@ -87,16 +93,27 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 		
-		//Box2D
+		// Box2D
 		world.step(Box2DConstants.STEP, Box2DConstants.VELOCITY_ITERATIONS, Box2DConstants.POSITION_ITERATIONS);  //delta? en lugar de 1/60f  de 6 a 8 y de 2 a 3
 		renderer.setView(camera);
 		renderer.render();
 		box2DRenderer.render(world, camera.combined);
 		
+		// Elements render
+		Array<Body> bodies = new Array<Body>();
+		this.world.getBodies(bodies);
+		for (Body body : bodies) {
+			if(body.getUserData() != null && body.getUserData() instanceof Element){
+				((Element)body.getUserData()).render();
+			}
+		}
+		
+		// Camera
 		float cameraX = currentAvatar.getBody().getPosition().x;
 		float cameraY = currentAvatar.getBody().getPosition().y;
 		camera.position.set(cameraX, cameraY, 0);
 		
+		// Input
 		if(Gdx.input.isKeyPressed(Input.Keys.Z)){
 			camera.zoom += 0.1f;
 //			System.out.println(camera.zoom);
@@ -118,11 +135,28 @@ public class GameScreen implements Screen {
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-			currentAvatar.shoot();
+//			currentAvatar.shoot();
+			currentAvatar.strike();
 		}
 		
 		camera.update();
 		
+		// Destroy bodies
+//		if(!world.isLocked()){
+//			System.out.println("Bef:"+world.getBodyCount());
+//			for (Body body : this.bodiesToDestroy) {
+//				for (Fixture fixture : body.getFixtureList()) {
+//					body.destroyFixture(fixture);
+//					fixture.setUserData(null);
+//					fixture = null;
+//				}
+//				world.destroyBody(body);
+//				body.setUserData(null);
+//				body = null;
+//			}
+//			this.bodiesToDestroy.clear();
+//			System.out.println("Aft:"+world.getBodyCount());
+//		}
 	}
 
 	@Override
@@ -154,6 +188,10 @@ public class GameScreen implements Screen {
 		world.dispose();
 		renderer.dispose();
 		box2DRenderer.dispose();
+	}
+	
+	public void addBodyToDestroy(Body body){
+		this.bodiesToDestroy.add(body);
 	}
 
 }

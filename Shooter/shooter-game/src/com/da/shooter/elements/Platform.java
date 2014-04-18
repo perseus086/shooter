@@ -17,4 +17,10 @@ public class Platform implements Element{
 		return body;
 	}
 
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

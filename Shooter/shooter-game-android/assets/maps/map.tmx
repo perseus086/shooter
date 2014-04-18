@@ -14,7 +14,7 @@
     <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
-  <object name="Piso2" type="object" x="298" y="994" width="388" height="41">
+  <object name="Piso2" type="object" x="304" y="1008" width="384" height="16">
    <properties>
     <property name="bodyType" value="StaticBody"/>
    </properties>
@@ -27,6 +27,7 @@
   <object name="Piso4" type="object" x="325" y="764" width="355" height="57">
    <properties>
     <property name="bodyType" value="StaticBody"/>
+    <property name="userData" value="platform"/>
    </properties>
   </object>
   <object name="Wall1" type="object" x="-116" y="0" width="118" height="1274">

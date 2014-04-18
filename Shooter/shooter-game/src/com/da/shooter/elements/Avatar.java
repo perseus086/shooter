@@ -1,8 +1,13 @@
 package com.da.shooter.elements;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.da.shooter.utils.Box2DUtils;
 
 /**
@@ -16,24 +21,33 @@ public class Avatar implements Element,Comparable<Avatar>{
 	/** The sprite path. */
 	private String spritePath; 
 	
+	private int status;
+	
 	private boolean grounded;
 
 	private boolean currentPlayer;
 	
 	private boolean direction; // true right; false left
 	
+	private Map<Integer,Body> bodies;
+	
 	public Avatar(boolean currentPlayer) {
 		this.grounded = false;
 		this.currentPlayer = currentPlayer;
+		this.bodies = new HashMap<Integer, Body>();
+		this.status = AvatarConstants.STATUS_NONE;
 	}
 	
 	public void createObject(Vector2 initPosition, World world){
 		
 		// Body
 		body = Box2DUtils.createPolygonBody(world, AvatarConstants.FIXTURE_BODY, initPosition, 2f, 5f, 5f, 5f, 0f,true,false,true);
-		
+
 		// Foot
-		Box2DUtils.addSensorFixture(body,AvatarConstants.FIXTURE_FOOT,1f,1f,new Vector2(0f, -4.1f));
+		Box2DUtils.addSensorFixture(body,AvatarConstants.FIXTURE_FOOT,1f,1f,new Vector2(0f, -4.2f),0);
+		
+		// Sword
+		createSword();
 		
 		
 		body.setUserData(this);
@@ -43,6 +57,29 @@ public class Avatar implements Element,Comparable<Avatar>{
 //		sprite.setSize(15f, 15f);
 //		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 //		body.setUserData(sprite);
+	}
+	
+	public void createSword(){
+		// Sword
+		Vector2 position = this.getBody().getPosition().cpy();
+		position.add(0, 2);
+		Body swordBody = Box2DUtils.createPolygonBody(this.getBody().getWorld(), AvatarConstants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, false, false);
+		this.bodies.put(AvatarConstants.BODY_SWORD,swordBody);
+
+		// Revolute joint
+		RevoluteJointDef jointDef = new RevoluteJointDef();
+		jointDef.initialize(this.getBody(), swordBody, position);
+		jointDef.collideConnected = false;
+		jointDef.enableLimit = true;
+		jointDef.lowerAngle = (float)(-Math.PI/2.0);
+		jointDef.upperAngle = (float)(Math.PI/2.0);
+		// jointDef.bodyA = this.getBody();
+//		jointDef.bodyB = swordBody;
+//		jointDef.collideConnected = true;
+//		jointDef.localAnchorA.set(position);
+		jointDef.localAnchorB.set(0, -3f);
+		RevoluteJoint joint = (RevoluteJoint) this.getBody().getWorld().createJoint(jointDef);
+		
 	}
 
 	/* (non-Javadoc)
@@ -72,10 +109,28 @@ public class Avatar implements Element,Comparable<Avatar>{
 //		}
 	}
 	
-	public void shoot(){
-		Bullet bullet = new Bullet(this);
-		bullet.createObject(this.getBody().getWorld(),this.direction);
+//	public void shoot(){
+//		Bullet bullet = null;
+//		if(this.bullets.size() > 100){
+//			bullet = this.bullets.remove(0);
+//		}else{
+//			bullet = new Bullet(this);
+//			bullet.createObject(this.getBody().getWorld());
+//		}
+//		
+//		Vector2 position = this.getBody().getPosition().cpy();
+//		position = (direction)?position.add(1, 0):position.add(-1, 0);
+//		bullet.getBody().setTransform(position.x, position.y, 0);
+//		bullet.getBody().applyLinearImpulse(new Vector2((direction)?3000f:-3000f,0), new Vector2(0, 0), true);
+//		this.bullets.add(bullet);
+//	}
+	
+	public void strike(){
+		this.status = AvatarConstants.STATUS_STRIKING;
+		this.bodies.get(AvatarConstants.BODY_SWORD).applyTorque(((direction)?-1:1)*9000f, true);
+//		this.fixtures.get(AvatarConstants.FIXTURE_SWORD).
 	}
+	
 	
 	
 //	public void setPosition(MovingPosition movingPosition){
@@ -132,10 +187,33 @@ public class Avatar implements Element,Comparable<Avatar>{
 	public boolean isCurrentPlayer() {
 		return currentPlayer;
 	}
+
+	@Override
+	public void render() {
+		Body swordBody = this.bodies.get(AvatarConstants.BODY_SWORD);
+		if(Math.abs(swordBody.getAngle()) > 1.55){
+			this.status = AvatarConstants.STATUS_NONE;
+		}
+		
+		switch (this.status) {
+			case AvatarConstants.STATUS_NONE:
+				swordBody.setAngularVelocity(0);
+				swordBody.setTransform(swordBody.getPosition(), 0);
+			break;
+			default:
+			break;
+		}
+		
+	}
 	
 }
 
 interface AvatarConstants{
+	int STATUS_NONE = 0;
+	int STATUS_STRIKING = 1;
+	
 	int FIXTURE_FOOT = 0;
 	int FIXTURE_BODY = 1;
+	
+	int BODY_SWORD = 2;
 }

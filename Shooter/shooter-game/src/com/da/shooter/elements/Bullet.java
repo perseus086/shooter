@@ -15,10 +15,11 @@ public class Bullet implements Element {
 		this.owner = owner;
 	}
 
-	public void createObject(World world,boolean direction){
-		body = Box2DUtils.createPolygonBody(world,null, owner.getBody().getPosition(), 0.1f, 0.1f, 0f, 0f, 0f,true,true,true);
+	public void createObject(World world){
+//		position = (direction)?position.add(1, 0):position.add(-1, 0);
+		body = Box2DUtils.createPolygonBody(world,null, new Vector2(-100f,-100f), 0.3f, 0.1f, 0f, 0f, 0f,true,true,true);
 		body.setUserData(this);
-		this.getBody().applyLinearImpulse(new Vector2((direction)?600f:-300f,0), new Vector2(0, 0), true);
+		
 		// Image
 //		Sprite sprite = new Sprite(new Texture(this.spritePath));
 //		sprite.setSize(15f, 15f);
@@ -29,6 +30,20 @@ public class Bullet implements Element {
 	@Override
 	public Body getBody() {
 		return body;
+	}
+
+	public Avatar getOwner() {
+		return owner;
+	}
+
+	public void destroy() {
+		this.getBody().setTransform(-1000, -1000, 0);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
