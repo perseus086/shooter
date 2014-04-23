@@ -1,13 +1,13 @@
 package com.da.shooter;
 
 import com.badlogic.gdx.Game;
-import com.da.shooter.Splash;
 
 public class MyShooterGame extends Game {
 	
 	@Override
 	public void create() {		
-		this.setScreen(new GameScreen(this));// Splash(this));
+		GameScreen.createInstance(this,false,"localhost");
+		this.setScreen(GameScreen.getInstance());// Splash(this));
 	}
 
 	@Override

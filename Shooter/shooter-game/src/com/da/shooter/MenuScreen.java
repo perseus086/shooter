@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.da.shooter.communication.utils.IdGenerator;
 
 public class MenuScreen implements Screen{
 
@@ -85,14 +86,12 @@ public class MenuScreen implements Screen{
 		stage.addActor(joinButton);
 		stage.addActor(label);
 		
-		
-		
-		
 		createButton.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new GameScreen(game));
+				GameScreen.createInstance(game,true,IdGenerator.generateId());
+				game.setScreen(GameScreen.getInstance());
 			}
 		});
 		
@@ -123,10 +122,10 @@ public class MenuScreen implements Screen{
 		stage.act(delta);
 		stage.draw();
 		
-		if(Gdx.input.isKeyPressed(Keys.ENTER))
-		{
-			game.setScreen(new GameScreen(game));
-		}
+//		if(Gdx.input.isKeyPressed(Keys.ENTER))
+//		{
+//			game.setScreen(new GameScreen(game));
+//		}
 	}
 
 	@Override

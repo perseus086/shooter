@@ -1,7 +1,5 @@
 package com.da.shooter.elements;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -26,10 +24,10 @@ public class MapContactListener implements ContactListener {
 	public void endContact(Contact contact) {
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
 		Bullet bullet= (Bullet) getObject(Bullet.class,contact);
-		if(avatar != null && avatar.isCurrentPlayer() && bullet == null){
+		if(avatar != null && bullet == null){
 			Fixture avatarFixture = getElementFixture(avatar, contact);
 			switch ((Integer)avatarFixture.getUserData()) {
-				case AvatarConstants.FIXTURE_FOOT:
+				case Avatar.Constants.FIXTURE_FOOT:
 					avatar.setGrounded(false);
 				break;
 				default:
@@ -62,7 +60,7 @@ public class MapContactListener implements ContactListener {
 		if(avatar != null){
 			Fixture avatarFixture = getElementFixture(avatar,contact);
 			switch ((Integer)avatarFixture.getUserData()) {
-				case AvatarConstants.FIXTURE_FOOT:
+				case Avatar.Constants.FIXTURE_FOOT:
 					avatar.setGrounded(true);
 				break;
 				default:
@@ -94,10 +92,10 @@ public class MapContactListener implements ContactListener {
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
 		Platform platform = (Platform) getObject(Platform.class,contact);
 		
-		if(avatar != null && avatar.isCurrentPlayer() && platform != null){
+		if(avatar != null && platform != null){
 			Fixture avatarFixture = getElementFixture(avatar, contact);
 			switch ((Integer)avatarFixture.getUserData()) {
-				case AvatarConstants.FIXTURE_BODY:
+				case Avatar.Constants.FIXTURE_BODY:
 					if(contactImpulse.getNormalImpulses()[0]>200){
 						contact.setFriction(0);
 //						System.out.println("NI[0]:"+Arrays.toString(contactImpulse.getNormalImpulses()));
