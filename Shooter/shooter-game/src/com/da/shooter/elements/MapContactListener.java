@@ -1,5 +1,11 @@
 package com.da.shooter.elements;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -22,19 +28,7 @@ public class MapContactListener implements ContactListener {
 	 */
 	@Override
 	public void endContact(Contact contact) {
-		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
-		Bullet bullet= (Bullet) getObject(Bullet.class,contact);
-		if(avatar != null && bullet == null){
-			Fixture avatarFixture = getElementFixture(avatar, contact);
-			switch ((Integer)avatarFixture.getUserData()) {
-				case Avatar.Constants.FIXTURE_FOOT:
-					avatar.setGrounded(false);
-				break;
-				default:
-				break;
-			}
-			
-		}
+//		
 	}
 
 	/* (non-Javadoc)
@@ -45,15 +39,11 @@ public class MapContactListener implements ContactListener {
 		Bullet bullet= (Bullet) getObject(Bullet.class,contact);
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
 		Platform platform = (Platform) getObject(Platform.class,contact);
-		
-		// Bullets
-		if(bullet != null){
-			if(avatar != null && !bullet.getOwner().equals(avatar)){
-				System.out.println("Bullet hit");
-				bullet.destroy();
-			}else if(avatar == null){
-				bullet.destroy();
-			}
+		Sword sword= (Sword) getObject(Sword.class,contact);
+				
+		if(sword != null && avatar != null){
+			System.out.println("Pitcher: "+sword.getOwner().getPlayer().getAvatarId()); 
+			System.out.println("Catcher: "+avatar.getPlayer().getAvatarId());
 		}
 		
 		// Avatar
@@ -70,15 +60,6 @@ public class MapContactListener implements ContactListener {
 			
 		}
 		
-		
-		
-//		if(obj1.getClass().equals(Avatar.class) && obj2.getClass().equals(Platform.class)){
-//			((Avatar)obj1).setGrounded(true);
-//		}
-//		
-//		if(obj2.getClass().equals(Avatar.class) && obj1.getClass().equals(Platform.class)){
-//			((Avatar)obj2).setGrounded(true);
-//		}
 	}
 	
 	int count = 0;
@@ -90,6 +71,7 @@ public class MapContactListener implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 ////		System.out.println("Tspeed:"+Arrays.toString(contactImpulse.getNormalImpulses())+","+Arrays.toString(contactImpulse.getTangentImpulses()));
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
+		Sword sword= (Sword) getObject(Sword.class,contact);
 		Platform platform = (Platform) getObject(Platform.class,contact);
 		
 		if(avatar != null && platform != null){
@@ -116,6 +98,14 @@ public class MapContactListener implements ContactListener {
 //			}else{
 //			}
 		}
+		
+//		Avatar aA = (Avatar) getObjectFromFixture(Avatar.class, contact.getFixtureA());
+//		Avatar aB = (Avatar) getObjectFromFixture(Avatar.class, contact.getFixtureB());
+//		
+//		if(aA != null && aB != null){
+//			System.out.println("Normal: "+Arrays.toString(contactImpulse.getNormalImpulses()));
+//		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -129,12 +119,20 @@ public class MapContactListener implements ContactListener {
 	
 	private Object getObject(Class<?> type,Contact contact){
 		Fixture[] fixtures = new Fixture[]{contact.getFixtureA(),contact.getFixtureB()};
-		for (Fixture fixture : fixtures) {
+		for (int i=0;i<fixtures.length;i++) {
+			Fixture fixture = fixtures[i];
 			if(fixture == null || fixture.getBody() == null) continue;
 			
 			if(fixture.getBody().getUserData() != null && fixture.getBody().getUserData().getClass().equals(type)){
 				return fixture.getBody().getUserData();
 			}
+		}
+		return null;
+	}
+	
+	private Object getObjectFromFixture(Class<?> type, Fixture fixture){
+		if(fixture.getBody().getUserData() != null && fixture.getBody().getUserData().getClass().equals(type)){
+			return fixture.getBody().getUserData();
 		}
 		return null;
 	}

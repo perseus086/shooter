@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.da.shooter.communication.Player;
 import com.da.shooter.utils.Box2DUtils;
 
 /**
@@ -36,7 +37,10 @@ public class Avatar implements Element,Comparable<Avatar>{
 	
 	private List<Integer> actions;
 	
-	public Avatar() {
+	private Player player;
+	
+	public Avatar(Player player) {
+		this.player = player;
 		this.grounded = false;
 		this.bodies = new HashMap<Integer, Body>();
 		this.status = Constants.STATUS_NONE;
@@ -68,26 +72,28 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 	
 	public void createSword(){
-		// Sword
-		Vector2 position = this.getBody().getPosition().cpy();
-		position.add(0, 2);
-		Body swordBody = Box2DUtils.createPolygonBody(this.getBody().getWorld(), Constants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, true, false);
-		
-		this.bodies.put(Constants.BODY_SWORD,swordBody);
-
-		// Revolute joint
-		RevoluteJointDef jointDef = new RevoluteJointDef();
-		jointDef.initialize(this.getBody(), swordBody, position);
-		jointDef.collideConnected = false;
-		jointDef.enableLimit = true;
-		jointDef.lowerAngle = (float)(-Math.PI/2);
-		jointDef.upperAngle = (float)(Math.PI/2);
-		// jointDef.bodyA = this.getBody();
-//		jointDef.bodyB = swordBody;
-//		jointDef.collideConnected = true;
-//		jointDef.localAnchorA.set(position);
-		jointDef.localAnchorB.set(0, -3f);
-		this.getBody().getWorld().createJoint(jointDef);
+		Sword sword = new Sword(this);
+		this.bodies.put(Constants.BODY_SWORD,sword.createBody());
+//		// Sword
+//		Vector2 position = this.getBody().getPosition().cpy();
+//		position.add(0, 2);
+//		Body swordBody = Box2DUtils.createPolygonBody(this.getBody().getWorld(), Constants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, true, false);
+//		
+//		this.bodies.put(Constants.BODY_SWORD,swordBody);
+//
+//		// Revolute joint
+//		RevoluteJointDef jointDef = new RevoluteJointDef();
+//		jointDef.initialize(this.getBody(), swordBody, position);
+//		jointDef.collideConnected = false;
+//		jointDef.enableLimit = true;
+//		jointDef.lowerAngle = (float)(-Math.PI/2);
+//		jointDef.upperAngle = (float)(Math.PI/2);
+//		// jointDef.bodyA = this.getBody();
+////		jointDef.bodyB = swordBody;
+////		jointDef.collideConnected = true;
+////		jointDef.localAnchorA.set(position);
+//		jointDef.localAnchorB.set(0, -3f);
+//		this.getBody().getWorld().createJoint(jointDef);
 		
 	}
 
@@ -259,6 +265,10 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 	public Body getBody(int type){
 		return (this.bodies.containsKey(type))?this.bodies.get(type):null;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	// Actions

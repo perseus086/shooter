@@ -195,7 +195,7 @@ public class CommunicationManager extends Thread{
 		player.setAddress(address);
 		player.setAvatarId(IdGenerator.generateId());
 		this.players.put(address.getHostName(), player);
-		GameScreen.getInstance().createAvatar(player.getAvatarId());
+		GameScreen.getInstance().createAvatar(player);
 		return player;
 	}
 

@@ -121,10 +121,11 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	public Avatar createAvatar(String avatarId){
-		Avatar avatar = new Avatar();
+	public Avatar createAvatar(Player player){
+		Avatar avatar = new Avatar(player);
 		avatar.createObject(new Vector2(30,100),world);
-		this.avatars.put(avatarId, avatar);
+		
+		this.avatars.put(player.getAvatarId(), avatar);
 		return avatar;
 	}
 	
@@ -343,7 +344,7 @@ public class GameScreen implements Screen {
 				Player player = ownerPositions.get(avatarId);
 				Avatar avatar = null;
 				if(!this.avatars.containsKey(avatarId)){
-					avatar = createAvatar(avatarId);
+					avatar = createAvatar(player);
 					this.avatars.put(avatarId,avatar);
 				}else{
 					avatar = this.avatars.get(avatarId);
