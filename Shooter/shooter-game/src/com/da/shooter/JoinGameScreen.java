@@ -70,10 +70,9 @@ public class JoinGameScreen implements Screen{
 				titleLabel = new Label(this.title, new LabelStyle(halo48orangeFont, Color.WHITE));
 				titleLabel.setPosition(Gdx.graphics.getWidth()/2.0f - titleLabel.getWidth()/2, 6* Gdx.graphics.getHeight()/7.0f);
 				//Textbox label
-				//Title label
 				white30boldFont = new BitmapFont(Gdx.files.internal("fonts/white30bold.fnt"));		
-				label1 = new Label("Game code:", new LabelStyle(white30boldFont, Color.WHITE));
-				label1.setPosition(Gdx.graphics.getWidth()/2.0f-label1.getWidth(), 4* Gdx.graphics.getHeight()/7.0f+60);
+				label1 = new Label("IP adress of game creator:", new LabelStyle(white30boldFont, Color.WHITE));
+				label1.setPosition(Gdx.graphics.getWidth()/2.0f-label1.getWidth()/2, 4* Gdx.graphics.getHeight()/7.0f+60);
 				
 				message = new Label("E", new LabelStyle(white30boldFont, Color.WHITE));
 				message.setPosition(Gdx.graphics.getWidth()/2.0f-message.getWidth()/2, 1* Gdx.graphics.getHeight()/7.0f);
@@ -108,7 +107,7 @@ public class JoinGameScreen implements Screen{
 				tfs.cursor = skin.getDrawable("cursor");
 				tfs.background = skin.getDrawable("textField");
 				tfs.fontColor = Color.WHITE;
-				textField = new TextField("", tfs);
+				textField = new TextField("localhost", tfs);
 				textField.setHeight(50);
 				textField.setWidth(300);
 				textField.setPosition(Gdx.graphics.getWidth()/2.0f - textField.getWidth()/2, 4*Gdx.graphics.getHeight()/7.0f);
@@ -127,7 +126,12 @@ public class JoinGameScreen implements Screen{
 					
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
-						String msg = "Error: you are an asshole";
+						System.out.println(textField.getText());
+						
+						GameScreen.createInstance(game,false,textField.getText());
+						game.setScreen(GameScreen.getInstance());
+						
+						String msg = "";
 						message.setPosition(Gdx.graphics.getWidth()/2.0f - message.getWidth()*msg.length()/2.0f, 1* Gdx.graphics.getHeight()/7.0f);
 						message.setText(msg);
 					}

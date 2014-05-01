@@ -122,10 +122,6 @@ public class MenuScreen implements Screen{
 		stage.act(delta);
 		stage.draw();
 		
-//		if(Gdx.input.isKeyPressed(Keys.ENTER))
-//		{
-//			game.setScreen(new GameScreen(game));
-//		}
 	}
 
 	@Override
