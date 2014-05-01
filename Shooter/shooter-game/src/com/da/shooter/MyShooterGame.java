@@ -6,7 +6,7 @@ public class MyShooterGame extends Game {
 	
 	@Override
 	public void create() {		
-		GameScreen.createInstance(this,false,"localhost");
+		GameScreen.createInstance(this,false,"10.9.179.157");
 		this.setScreen(GameScreen.getInstance());// Splash(this));
 	}
 

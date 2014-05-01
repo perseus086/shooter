@@ -210,10 +210,8 @@ public class GameScreen implements Screen {
 		if(this.creator){
 			if(this.checkStatus(GameStatus.PLAYING)){
 				for(String avatarId : avatars.keySet()){
-					if(this.getActions(avatarId) != null){
-						for (int action : this.getActions(avatarId)) {
-							this.executeAction(avatarId,action);
-						}
+					for (int action : this.getActions(avatarId)) {
+						this.executeAction(avatarId,action);
 					}
 				}
 			}
