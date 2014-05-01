@@ -5,6 +5,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.da.desktop.input.DesktopInputProcessor;
 
 public class Main {
+	
+	public static LwjglApplication app;
+	
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "shooter-game";
@@ -12,7 +15,11 @@ public class Main {
 		cfg.width = 720;
 		cfg.height = 1080;
 		
-		LwjglApplication app = new LwjglApplication(new MyShooterGame(), cfg);
-		app.getInput().setInputProcessor(new DesktopInputProcessor());
+		app = new LwjglApplication(new MyShooterGame(){
+			public void initInputListeners(){
+				app.getInput().setInputProcessor(new DesktopInputProcessor());
+			}
+		}, cfg);
+		
 	}
 }

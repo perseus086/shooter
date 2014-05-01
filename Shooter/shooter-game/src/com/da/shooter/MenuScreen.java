@@ -20,7 +20,7 @@ import com.da.shooter.communication.utils.IdGenerator;
 
 public class MenuScreen implements Screen{
 
-	private Game game;
+	private MyShooterGame game;
 	
 	private Stage stage;
 	private TextButton createButton;
@@ -35,7 +35,7 @@ public class MenuScreen implements Screen{
 	private String title;
 	
 	
-	public MenuScreen(Game game){
+	public MenuScreen(MyShooterGame game){
 		this.game = game;
 		this.title = "Main Menu";
 		System.out.println("Menu Screen");
@@ -90,8 +90,9 @@ public class MenuScreen implements Screen{
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				GameScreen.createInstance(game,true,IdGenerator.generateId());
+				GameScreen.createInstance(game,true,"localhost");
 				game.setScreen(GameScreen.getInstance());
+				game.initInputListeners();
 			}
 		});
 		

@@ -2,7 +2,7 @@ package com.da.shooter;
 
 import com.badlogic.gdx.Game;
 
-public class MyShooterGame extends Game {
+public abstract class MyShooterGame extends Game {
 	
 	@Override
 	public void create() {		
@@ -35,4 +35,6 @@ public class MyShooterGame extends Game {
 	public void resume() {
 		super.resume();
 	}
+	
+	abstract public void initInputListeners();
 }

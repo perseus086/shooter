@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class ConfigurationScreen implements Screen{
 
-	private Game game;
+	private MyShooterGame game;
 	
 	private Stage stage;
 	private TextButton testButton;
@@ -38,7 +38,7 @@ public class ConfigurationScreen implements Screen{
 	private Label message;
 	private String title;
 	
-	public ConfigurationScreen(Game game){
+	public ConfigurationScreen(MyShooterGame game){
 		this.game = game;
 		this.title = "Configurations";
 		System.out.println("Configuration Screen");

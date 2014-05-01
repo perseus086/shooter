@@ -11,13 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Splash implements Screen {
 	
-	private Game game;
+	private MyShooterGame game;
 	private Texture splashImage;
 	private BitmapFont haloFont;
 	private SpriteBatch spriteBatch;
 	private final String gameName = "ULTRA KILL I";
 	
-	public Splash(Game game){
+	public Splash(MyShooterGame game){
 		this.game = game;
 		System.out.println("Splash Screen");
 		//No se cual es la diferencia entre poner

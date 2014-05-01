@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 public class JoinGameScreen implements Screen{
 
-	private Game game;
+	private MyShooterGame game;
 	
 	private Stage stage;
 	private TextButton testButton;
@@ -38,7 +38,7 @@ public class JoinGameScreen implements Screen{
 	private Label message;
 	private String title;
 	
-	public JoinGameScreen(Game game){
+	public JoinGameScreen(MyShooterGame game){
 		this.game = game;
 		this.title = "Join Game";
 		System.out.println("Join Game Screen");
