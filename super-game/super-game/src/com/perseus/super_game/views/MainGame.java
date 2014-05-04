@@ -6,7 +6,7 @@ public class MainGame extends Game {
 
 	@Override
 	public void create() {
-		this.setScreen(new Splash(this));		
+		this.setScreen(new Prehistorik(this));		
 	}
 
 	@Override

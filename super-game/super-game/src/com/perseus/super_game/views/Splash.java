@@ -33,6 +33,7 @@ public class Splash implements Screen{
 	private Game mygame;
 	private BitmapFont font;
 	private TextureAtlas atlas;
+	private TextureAtlas atlas2;
 	private SpriteBatch batch;
 	private TextureRegion test;
 	private TextField textField;
@@ -40,6 +41,7 @@ public class Splash implements Screen{
 	private Texture texture;
 	private TextureRegion[][] sprites;
 	private TextureRegion[] sprites2;
+	private TextureRegion[] spritee;
 	private Animation animation;
 	float stateTime;
 	
@@ -69,6 +71,16 @@ public class Splash implements Screen{
 		textButton.setHeight(100f);
 		textButton.setWidth(300f);
 		
+		
+		
+		atlas2 = new TextureAtlas("sprites/hero.txt");
+		spritee = new TextureRegion[6];
+		spritee[0] = atlas2.findRegion("hit left 1");
+		spritee[1] = atlas2.findRegion("hit left 2");
+		spritee[2] = atlas2.findRegion("hit left 3");
+		spritee[3] = atlas2.findRegion("hit left 4");
+		spritee[4] = atlas2.findRegion("hit left 5");
+		spritee[5] = atlas2.findRegion("hit left 6");
 		
 		TextFieldStyle tfs = new TextFieldStyle();
 		tfs.font = font;
@@ -103,7 +115,7 @@ public class Splash implements Screen{
 		
 		///////PRUEBAS CON ANIMATION
 		sprites2 = TextureRegion.split(texture, 64, 64)[0];
-		animation = new Animation(1/18.0f, sprites2);
+		animation = new Animation(1/2.0f, spritee);
 		
 		
 		
@@ -122,12 +134,13 @@ public class Splash implements Screen{
 		
 		
 		stateTime += delta;
-		
-		
-		
+
 		batch.begin();
 		batch.draw(test, 300, 300); //It works
 		batch.draw(sprites[0][0], 400, 400);
+		batch.draw(spritee[0], 20, 20);
+//		batch.draw(spritee[1], 40, 20);
+//		batch.draw(spritee[2], 60, 20);
 //		batch.draw(sprites[1][3], 20, 40);
 //		batch.draw(sprites[2][1], 600, 600);
 		batch.draw(animation.getKeyFrame(stateTime, true), 500, 600);
