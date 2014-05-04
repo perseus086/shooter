@@ -1,5 +1,6 @@
 package com.da.shooter.elements;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class Platform implements Element{
@@ -18,9 +19,7 @@ public class Platform implements Element{
 	}
 
 	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-		
+	public void render(float delta, Camera camera) {
 	}
 	
 }

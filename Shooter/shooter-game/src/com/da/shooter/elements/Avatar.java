@@ -5,11 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.da.shooter.communication.Player;
 import com.da.shooter.utils.Box2DUtils;
 
@@ -21,8 +27,11 @@ public class Avatar implements Element,Comparable<Avatar>{
 	/** The body. */
 	private Body body;
 	
-	/** The sprite path. */
-	private String spritePath; 
+	private String spritePath;
+	private TextureAtlas textureAtlas;
+	private Map<String,Animation> animations;
+	private SpriteBatch spriteBatch;
+	private float stateTime;
 	
 	private int status;
 	
@@ -45,6 +54,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 		this.bodies = new HashMap<Integer, Body>();
 		this.status = Constants.STATUS_NONE;
 		this.version = 0;
+		this.stateTime = 0;
 	}
 	
 	public void createObject(Vector2 initPosition, World world){
@@ -64,37 +74,28 @@ public class Avatar implements Element,Comparable<Avatar>{
 		
 		body.setUserData(this);
 		
-		// Image
-//		Sprite sprite = new Sprite(new Texture(this.spritePath));
-//		sprite.setSize(15f, 15f);
-//		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-//		body.setUserData(sprite);
+		// Load sprites
+		spriteBatch = new SpriteBatch();
+		textureAtlas = new TextureAtlas("sprites/hero.txt");
+		Map<String,List<TextureRegion>> regions = new HashMap<String,List<TextureRegion>>();
+		for (AtlasRegion region : textureAtlas.getRegions()) {
+			String name = region.name.substring(0, region.name.length()-1);
+			if(!regions.containsKey(name)){
+				regions.put(name, new ArrayList<TextureRegion>());
+			}
+			regions.get(name).add(region);
+		}
+		animations = new HashMap<String,Animation>();
+		for (String regionName : regions.keySet()) {
+			animations.put(regionName, new Animation(1/6.0f, (TextureRegion[]) regions.get(regionName).toArray(new TextureRegion[]{})));
+		}
+		System.out.println("End Sprites");
+		
 	}
 	
 	public void createSword(){
 		Sword sword = new Sword(this);
 		this.bodies.put(Constants.BODY_SWORD,sword.createBody());
-//		// Sword
-//		Vector2 position = this.getBody().getPosition().cpy();
-//		position.add(0, 2);
-//		Body swordBody = Box2DUtils.createPolygonBody(this.getBody().getWorld(), Constants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, true, false);
-//		
-//		this.bodies.put(Constants.BODY_SWORD,swordBody);
-//
-//		// Revolute joint
-//		RevoluteJointDef jointDef = new RevoluteJointDef();
-//		jointDef.initialize(this.getBody(), swordBody, position);
-//		jointDef.collideConnected = false;
-//		jointDef.enableLimit = true;
-//		jointDef.lowerAngle = (float)(-Math.PI/2);
-//		jointDef.upperAngle = (float)(Math.PI/2);
-//		// jointDef.bodyA = this.getBody();
-////		jointDef.bodyB = swordBody;
-////		jointDef.collideConnected = true;
-////		jointDef.localAnchorA.set(position);
-//		jointDef.localAnchorB.set(0, -3f);
-//		this.getBody().getWorld().createJoint(jointDef);
-		
 	}
 
 	/* (non-Javadoc)
@@ -107,67 +108,26 @@ public class Avatar implements Element,Comparable<Avatar>{
 	public void jump(){
 		if(this.grounded){
 			this.getBody().setLinearVelocity(this.getBody().getLinearVelocity().x, 30);
-//			this.getBody().applyForceToCenter(new Vector2(0f,400000f), true);
+			this.setGrounded(false);
 		}
 	}
 	
 	public void right(){
 		this.direction = true;
-//		if(this.grounded || this.getBody().getLinearVelocity().x < 0){
-			this.getBody().applyLinearImpulse(new Vector2(300f,0), new Vector2(0, 0), true); //setLinearVelocity(10f, this.getBody().getLinearVelocity().y);
-//		}
+		this.getBody().applyLinearImpulse(new Vector2(300f,0), new Vector2(0, 0), true); //setLinearVelocity(10f, this.getBody().getLinearVelocity().y);
 	}
 	
 	public void left(){
 		this.direction = false;
-//		if(this.grounded || this.getBody().getLinearVelocity().x >  0){
-			this.getBody().applyLinearImpulse(new Vector2(-300f,0), new Vector2(0, 0), true);
-//		}
+		this.getBody().applyLinearImpulse(new Vector2(-300f,0), new Vector2(0, 0), true);
 	}
-	
-//	public void shoot(){
-//		Bullet bullet = null;
-//		if(this.bullets.size() > 100){
-//			bullet = this.bullets.remove(0);
-//		}else{
-//			bullet = new Bullet(this);
-//			bullet.createObject(this.getBody().getWorld());
-//		}
-//		
-//		Vector2 position = this.getBody().getPosition().cpy();
-//		position = (direction)?position.add(1, 0):position.add(-1, 0);
-//		bullet.getBody().setTransform(position.x, position.y, 0);
-//		bullet.getBody().applyLinearImpulse(new Vector2((direction)?3000f:-3000f,0), new Vector2(0, 0), true);
-//		this.bullets.add(bullet);
-//	}
 	
 	public void strike(){
 		this.status = Constants.STATUS_STRIKING;
 		this.bodies.get(Constants.BODY_SWORD).applyTorque(((direction)?-1:1)*110000f, true);
-//		this.fixtures.get(AvatarConstants.FIXTURE_SWORD).
 	}
 	
-	
-	
-//	public void setPosition(MovingPosition movingPosition){
-//		if(movingPosition == null) return;
-//		this.getBody().setTransform(movingPosition.xPos, movingPosition.yPos, movingPosition.angle);
-//		this.getBody().setLinearVelocity(new Vector2(movingPosition.linearSpeedX, movingPosition.linearSpeedY));
-//		this.getBody().setAngularVelocity(movingPosition.angularSpeed);
-//	}
 
-//	public void updatePosition(){
-//		if(player.movingPosition == null){
-//			player.movingPosition = new MovingPosition();
-//		}
-//		
-//		player.movingPosition.xPos = getBody().getPosition().x;
-//		player.movingPosition.yPos = getBody().getPosition().y;
-//		player.movingPosition.angle = getBody().getAngle();
-//		player.movingPosition.linearSpeedX = getBody().getLinearVelocity().x;
-//		player.movingPosition.linearSpeedY = getBody().getLinearVelocity().y;
-//		player.movingPosition.angularSpeed = getBody().getAngularVelocity();
-//	}
 
 	public boolean isGrounded() {
 		return grounded;
@@ -212,7 +172,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 
 	@Override
-	public void render() {
+	public void render(float delta, Camera camera) {
 		Body swordBody = this.bodies.get(Constants.BODY_SWORD);
 		if(Math.abs(swordBody.getAngle()) >= Math.PI/2 || 
 				(direction && swordBody.getAngularVelocity() > 0) || 
@@ -229,6 +189,48 @@ public class Avatar implements Element,Comparable<Avatar>{
 			break;
 		}
 		
+		// Sprites
+		renderSprites(delta,camera);
+	}
+	
+	private void renderSprites(float delta, Camera camera){
+		if(actions == null) return;
+		
+		OrthographicCamera oCamera = (OrthographicCamera) camera;
+		
+		spriteBatch.begin();
+				
+		stateTime += delta;
+//		System.out.println(stateTime);
+		
+		TextureRegion region= null;
+		
+		if(actions.contains(Type.JUMP) && (actions.contains(Type.LEFT)||!direction)){
+			region=animations.get("jump left ").getKeyFrame(stateTime, true);
+		}else if(actions.contains(Type.JUMP) && (actions.contains(Type.RIGHT) || direction)){
+			region=animations.get("jump right ").getKeyFrame(stateTime, true);
+		}else if(actions.contains(Type.ACTION) && (actions.contains(Type.LEFT)||!direction)){
+			region=animations.get("hit left ").getKeyFrame(stateTime, true);
+		}else if(actions.contains(Type.ACTION) && (actions.contains(Type.RIGHT) || direction)){
+			region=animations.get("hit right ").getKeyFrame(stateTime, true);
+		}else if(actions.contains(Type.LEFT)){
+			region=animations.get("run left ").getKeyFrame(stateTime, true);
+		}else if(actions.contains(Type.RIGHT)){
+			region=animations.get("run right ").getKeyFrame(stateTime, true);
+		}else if(direction){
+			region=animations.get("idle right ").getKeyFrame(stateTime, true);
+		}else{
+			region=animations.get("idle left ").getKeyFrame(stateTime, true);
+		}
+		System.out.println(oCamera.zoom);
+		// Camera projection
+		Vector3 pos = camera.project(new Vector3(this.getBody().getPosition().x -3f , this.getBody().getPosition().y-5f, 0));
+		float x = pos.x;
+		float y = pos.y;
+		float ratio = (float) (1.0/oCamera.zoom)*5;
+		
+		spriteBatch.draw(region,x,y,region.getRegionWidth()*ratio,region.getRegionHeight()*ratio);
+		spriteBatch.end();
 	}
 	
 	public void addAction(int action){

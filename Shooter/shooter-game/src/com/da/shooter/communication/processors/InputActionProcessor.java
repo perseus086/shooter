@@ -19,6 +19,7 @@ public class InputActionProcessor extends InputMessageProcessor {
 	@Override
 	Message process(Message msg) {
 		if(checkMsgNumber(msg.getAvatarId(),msg.getNumber())){
+			if(GameScreen.getInstance().getActions(msg.getAvatarId()) == null) return null;
 			synchronized (GameScreen.getInstance().getActions(msg.getAvatarId())) {
 				GameScreen.getInstance().setActions(msg.getAvatarId(),(List<Integer>) msg.getData());
 				lastMsgNumber.put(msg.getAvatarId(), msg.getNumber());
@@ -32,6 +33,7 @@ public class InputActionProcessor extends InputMessageProcessor {
 			return true;
 		}
 		if(lastMsgNumber.get(avatarId) > number){
+			System.out.println("==================== Msg ignored.");
 			return false;
 		}
 		return true;

@@ -1,5 +1,6 @@
 package com.da.shooter.elements;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.Body;
 
 /**
@@ -14,5 +15,5 @@ public interface Element {
 	 */
 	Body getBody();
 
-	void render();
+	void render(float delta, Camera camera);
 }

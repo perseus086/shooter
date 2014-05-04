@@ -181,20 +181,20 @@ public class GameScreen implements Screen {
 		renderer.render();
 		box2DRenderer.render(world, camera.combined);
 		
-		// Elements render
-		Array<Body> bodies = new Array<Body>();
-		this.world.getBodies(bodies);
-		for (Body body : bodies) {
-			if(body.getUserData() != null && body.getUserData() instanceof Element){
-				((Element)body.getUserData()).render();
-			}
-		}
-		
 		// Camera
 		if(this.player != null && this.avatars.containsKey(this.player.getAvatarId())){
 			float cameraX = this.avatars.get(this.player.getAvatarId()).getBody().getPosition().x;
 			float cameraY = this.avatars.get(this.player.getAvatarId()).getBody().getPosition().y;
 			camera.position.set(cameraX, cameraY, 0);
+		}
+		
+		// Elements render
+		Array<Body> bodies = new Array<Body>();
+		this.world.getBodies(bodies);
+		for (Body body : bodies) {
+			if(body.getUserData() != null && body.getUserData() instanceof Element){
+				((Element)body.getUserData()).render(delta,camera);
+			}
 		}
 		
 		// Input
@@ -211,6 +211,8 @@ public class GameScreen implements Screen {
 		if(this.creator){
 			if(this.checkStatus(GameStatus.PLAYING)){
 				for(String avatarId : avatars.keySet()){
+					List<Integer> actions = this.getActions(avatarId);
+					if(actions == null) continue;
 					for (int action : this.getActions(avatarId)) {
 						this.executeAction(avatarId,action);
 					}
