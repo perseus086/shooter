@@ -44,7 +44,7 @@ public class UdpMessageUtils {
 			for (InetAddress address : msg.getAddresses()) {
 				DatagramPacket sendPacket = new DatagramPacket(data, data.length,address , msg.getPort());
 				serverSocket.send(sendPacket);
-//				System.out.println("Msg out:"+address.getHostAddress()+" | "+msg.getPort()+"|"+msg.getType());
+				System.out.println("Msg out:"+address.getHostAddress()+" | "+msg.getPort()+"|"+msg.getType());
 			}
 			serverSocket.close();
 		} catch (SocketException e) {
@@ -85,7 +85,7 @@ public class UdpMessageUtils {
 			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 			message = (Message)objectInputStream.readObject();
 			message.setAddress(receivePacket.getAddress());
-//			System.out.println("Msg in:"+receivePacket.getAddress().getHostAddress()+" | "+port+"|"+message.getType());
+			System.out.println("Msg in:"+receivePacket.getAddress().getHostAddress()+" | "+port+"|"+message.getType());
 		}catch(SocketTimeoutException e){
 			// Message timeout
 		}catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.da.shooter.elements;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
 /**
@@ -15,5 +16,5 @@ public interface Element {
 	 */
 	Body getBody();
 
-	void render(float delta, Camera camera);
+	void render(float delta, Camera camera,SpriteBatch spriteBatch);
 }

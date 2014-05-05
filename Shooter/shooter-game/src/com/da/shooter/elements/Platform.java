@@ -1,6 +1,7 @@
 package com.da.shooter.elements;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class Platform implements Element{
@@ -19,7 +20,7 @@ public class Platform implements Element{
 	}
 
 	@Override
-	public void render(float delta, Camera camera) {
+	public void render(float delta, Camera camera,SpriteBatch spriteBatch) {
 	}
 	
 }

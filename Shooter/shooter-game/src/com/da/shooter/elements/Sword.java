@@ -1,6 +1,7 @@
 package com.da.shooter.elements;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -46,7 +47,7 @@ public class Sword implements Element {
 	}
 
 	@Override
-	public void render(float delta, Camera camera) {
+	public void render(float delta, Camera camera,SpriteBatch spriteBatch) {
 	}
 
 	public Avatar getOwner() {

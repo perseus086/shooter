@@ -13,6 +13,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -69,6 +70,7 @@ public class GameScreen implements Screen {
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	private List<Body> bodiesToDestroy;
+	private SpriteBatch spriteBatch;
 	
 	// Avatars
 	private Map<String,Avatar> avatars;
@@ -136,6 +138,7 @@ public class GameScreen implements Screen {
 		world = new World(Box2DConstants.GRAVITY, true);
 		box2DRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
+		spriteBatch = new SpriteBatch();
 		
 		//Tiled map
 		TiledMap map = new TmxMapLoader().load("maps/map.tmx");
@@ -164,8 +167,8 @@ public class GameScreen implements Screen {
 			CommunicationManager.getInstance().addOutputProcessor(new OutputPositionsProcessor());
 		}else{
 			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID_RESPONSE, new InputRequestResponseProcessor());
-			CommunicationManager.getInstance().addOutputProcessor(new OutputActionMessageProcessor());
 			CommunicationManager.getInstance().addInputProcessor(Message.Type.POSITIONS, new InputPositionsProcessor());
+			CommunicationManager.getInstance().addOutputProcessor(new OutputActionMessageProcessor());
 		}
 
 	}
@@ -189,13 +192,15 @@ public class GameScreen implements Screen {
 		}
 		
 		// Elements render
+		spriteBatch.begin();
 		Array<Body> bodies = new Array<Body>();
 		this.world.getBodies(bodies);
 		for (Body body : bodies) {
 			if(body.getUserData() != null && body.getUserData() instanceof Element){
-				((Element)body.getUserData()).render(delta,camera);
+				((Element)body.getUserData()).render(delta,camera,spriteBatch);
 			}
 		}
+		spriteBatch.end();
 		
 		// Input
 		if(Gdx.input.isKeyPressed(Input.Keys.Z)){
@@ -290,6 +295,7 @@ public class GameScreen implements Screen {
 		world.dispose();
 		renderer.dispose();
 		box2DRenderer.dispose();
+		spriteBatch.dispose();
 	}
 	
 	public void addBodyToDestroy(Body body){

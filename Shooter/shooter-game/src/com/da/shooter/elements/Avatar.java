@@ -24,13 +24,31 @@ import com.da.shooter.utils.Box2DUtils;
  */
 public class Avatar implements Element,Comparable<Avatar>{
 	
+	private static TextureAtlas textureAtlas;
+	private static Map<String,Animation> animations;
+	static{
+		// Load sprites
+		textureAtlas = new TextureAtlas("sprites/hero.txt");
+		Map<String,List<TextureRegion>> regions = new HashMap<String,List<TextureRegion>>();
+		for (AtlasRegion region : textureAtlas.getRegions()) {
+			String name = region.name.substring(0, region.name.length()-1);
+			if(!regions.containsKey(name)){
+				regions.put(name, new ArrayList<TextureRegion>());
+			}
+			regions.get(name).add(region);
+		}
+		animations = new HashMap<String,Animation>();
+		for (String regionName : regions.keySet()) {
+			animations.put(regionName, new Animation(1/6.0f, (TextureRegion[]) regions.get(regionName).toArray(new TextureRegion[]{})));
+		}
+	}
+	
 	/** The body. */
 	private Body body;
 	
 	private String spritePath;
-	private TextureAtlas textureAtlas;
-	private Map<String,Animation> animations;
-	private SpriteBatch spriteBatch;
+	
+	
 	private float stateTime;
 	
 	private int status;
@@ -73,23 +91,6 @@ public class Avatar implements Element,Comparable<Avatar>{
 		
 		
 		body.setUserData(this);
-		
-		// Load sprites
-		spriteBatch = new SpriteBatch();
-		textureAtlas = new TextureAtlas("sprites/hero.txt");
-		Map<String,List<TextureRegion>> regions = new HashMap<String,List<TextureRegion>>();
-		for (AtlasRegion region : textureAtlas.getRegions()) {
-			String name = region.name.substring(0, region.name.length()-1);
-			if(!regions.containsKey(name)){
-				regions.put(name, new ArrayList<TextureRegion>());
-			}
-			regions.get(name).add(region);
-		}
-		animations = new HashMap<String,Animation>();
-		for (String regionName : regions.keySet()) {
-			animations.put(regionName, new Animation(1/6.0f, (TextureRegion[]) regions.get(regionName).toArray(new TextureRegion[]{})));
-		}
-		System.out.println("End Sprites");
 		
 	}
 	
@@ -172,7 +173,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 
 	@Override
-	public void render(float delta, Camera camera) {
+	public void render(float delta, Camera camera,SpriteBatch spriteBatch) {
 		Body swordBody = this.bodies.get(Constants.BODY_SWORD);
 		if(Math.abs(swordBody.getAngle()) >= Math.PI/2 || 
 				(direction && swordBody.getAngularVelocity() > 0) || 
@@ -190,16 +191,14 @@ public class Avatar implements Element,Comparable<Avatar>{
 		}
 		
 		// Sprites
-		renderSprites(delta,camera);
+		renderSprites(delta,camera,spriteBatch);
 	}
 	
-	private void renderSprites(float delta, Camera camera){
+	private void renderSprites(float delta, Camera camera,SpriteBatch spriteBatch){
 		if(actions == null) return;
 		
 		OrthographicCamera oCamera = (OrthographicCamera) camera;
 		
-		spriteBatch.begin();
-				
 		stateTime += delta;
 //		System.out.println(stateTime);
 		
@@ -229,7 +228,6 @@ public class Avatar implements Element,Comparable<Avatar>{
 		float ratio = (float) (1.0/oCamera.zoom)*5;
 		
 		spriteBatch.draw(region,x,y,region.getRegionWidth()*ratio,region.getRegionHeight()*ratio);
-		spriteBatch.end();
 	}
 	
 	public void addAction(int action){
