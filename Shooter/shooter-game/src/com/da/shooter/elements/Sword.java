@@ -23,8 +23,8 @@ public class Sword implements Element {
 	public Body createBody(){
 		// Sword
 		Vector2 position = owner.getBody().getPosition().cpy();
-		position.add(0, 2);
-		body = Box2DUtils.createPolygonBody(owner.getBody().getWorld(), Constants.BODY_SWORD, position, 0.5f, 5f, 1f, 1f, 4f, true, true, false);
+		position.add(0, 0);
+		body = Box2DUtils.createPolygonBody(owner.getBody().getWorld(), Constants.BODY_SWORD, position, 0.5f, 2f, 1f, 1f, 4f, true, true, false);
 		
 		// Revolute joint
 		RevoluteJointDef jointDef = new RevoluteJointDef();

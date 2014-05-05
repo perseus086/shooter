@@ -60,13 +60,13 @@ public class Avatar implements Element,Comparable<Avatar>{
 	public void createObject(Vector2 initPosition, World world){
 		
 		// Body
-		body = Box2DUtils.createPolygonBody(world, Constants.FIXTURE_BODY, initPosition, 2f, 5f, 5f, 5f, 0f,true,false,true);
+		body = Box2DUtils.createPolygonBody(world, Constants.FIXTURE_BODY, initPosition, 2f, 3f, 5f, 5f, 0f,true,false,true);
 //		MassData massData = new MassData();
 //		massData.mass = 100;
 //		body.setMassData(massData);
 		
 		// Foot
-		Box2DUtils.addSensorFixture(body,Constants.FIXTURE_FOOT,1.9f,1f,new Vector2(0f, -4.2f),0);
+		Box2DUtils.addSensorFixture(body,Constants.FIXTURE_FOOT,1.9f,1f,new Vector2(0f, -2.2f),0);
 		
 		// Sword
 		createSword();
@@ -124,7 +124,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 	
 	public void strike(){
 		this.status = Constants.STATUS_STRIKING;
-		this.bodies.get(Constants.BODY_SWORD).applyTorque(((direction)?-1:1)*110000f, true);
+		this.bodies.get(Constants.BODY_SWORD).applyTorque(((direction)?-1:1)*11000f, true);
 	}
 	
 
@@ -204,15 +204,14 @@ public class Avatar implements Element,Comparable<Avatar>{
 //		System.out.println(stateTime);
 		
 		TextureRegion region= null;
-		
-		if(actions.contains(Type.JUMP) && (actions.contains(Type.LEFT)||!direction)){
-			region=animations.get("jump left ").getKeyFrame(stateTime, true);
-		}else if(actions.contains(Type.JUMP) && (actions.contains(Type.RIGHT) || direction)){
-			region=animations.get("jump right ").getKeyFrame(stateTime, true);
-		}else if(actions.contains(Type.ACTION) && (actions.contains(Type.LEFT)||!direction)){
+		if(actions.contains(Type.ACTION) && (actions.contains(Type.LEFT)||!direction)){
 			region=animations.get("hit left ").getKeyFrame(stateTime, true);
 		}else if(actions.contains(Type.ACTION) && (actions.contains(Type.RIGHT) || direction)){
 			region=animations.get("hit right ").getKeyFrame(stateTime, true);
+		}else if((actions.contains(Type.JUMP)|| !this.grounded) && (actions.contains(Type.LEFT)||!direction)){
+			region=animations.get("jump left ").getKeyFrame(2, true);
+		}else if((actions.contains(Type.JUMP)|| !this.grounded) && (actions.contains(Type.RIGHT) || direction)){
+			region=animations.get("jump right ").getKeyFrame(2, true);
 		}else if(actions.contains(Type.LEFT)){
 			region=animations.get("run left ").getKeyFrame(stateTime, true);
 		}else if(actions.contains(Type.RIGHT)){
@@ -222,9 +221,9 @@ public class Avatar implements Element,Comparable<Avatar>{
 		}else{
 			region=animations.get("idle left ").getKeyFrame(stateTime, true);
 		}
-		System.out.println(oCamera.zoom);
+//		System.out.println(oCamera.zoom);
 		// Camera projection
-		Vector3 pos = camera.project(new Vector3(this.getBody().getPosition().x -3f , this.getBody().getPosition().y-5f, 0));
+		Vector3 pos = camera.project(new Vector3(this.getBody().getPosition().x -3f , this.getBody().getPosition().y-3f, 0));
 		float x = pos.x;
 		float y = pos.y;
 		float ratio = (float) (1.0/oCamera.zoom)*5;
