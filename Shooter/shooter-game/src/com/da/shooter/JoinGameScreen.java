@@ -130,7 +130,7 @@ public class JoinGameScreen implements Screen{
 						
 						GameScreen.createInstance(game,false,textField.getText());
 						game.setScreen(GameScreen.getInstance());
-						game.initInputListeners();
+//						game.initInputListeners();
 						
 						String msg = "";
 						message.setPosition(Gdx.graphics.getWidth()/2.0f - message.getWidth()*msg.length()/2.0f, 1* Gdx.graphics.getHeight()/7.0f);

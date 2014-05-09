@@ -12,12 +12,12 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "shooter-game";
 		cfg.useGL30 = false;
-		cfg.width = 720;
-		cfg.height = 1080;
+		cfg.width = 1280;
+		cfg.height = 720;
 		
 		app = new LwjglApplication(new MyShooterGame(){
 			public void initInputListeners(){
-				app.getInput().setInputProcessor(new DesktopInputProcessor());
+				//app.getInput().setInputProcessor(new DesktopInputProcessor());
 			}
 		}, cfg);
 		

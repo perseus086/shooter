@@ -1,54 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="45" height="80" tilewidth="16" tileheight="16" backgroundcolor="#151680">
+<map version="1.0" orientation="orthogonal" width="100" height="80" tilewidth="16" tileheight="16" backgroundcolor="#151680">
  <tileset firstgid="1" name="marioTiles" tilewidth="16" tileheight="16">
   <image source="mariotles.png" trans="ff00ff" width="464" height="448"/>
  </tileset>
- <layer name="Tile Layer 1" width="45" height="80">
+ <layer name="Tile Layer 1" width="100" height="80">
   <data encoding="base64" compression="zlib">
-   eJztz8ENgDAMBEGHAuiDuigsrYYG8okCFtZIN/+9fkR0AAAAAAAAAABKudp+2Z9mH7M7gHV3208zQJ5nr8r+B9Rxxvc0/6MZoKIBCriC+Q==
+   eJztwwENAAAMw6Bqn/JfCCSsmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqquo/nJTfYg==
   </data>
  </layer>
- <objectgroup name="Object Layer 2" width="45" height="80">
-  <object name="Piso1" type="object" x="64" y="1120" width="464" height="47">
+ <layer name="Tile Layer 2" width="100" height="80">
+  <data encoding="base64" compression="zlib">
+   eJzt1bERgDAMBEH1425dMSkpCb6BDTbX/AVaM7MAAAAAAAA+ZN+cvqXqzY30aG2kR2sjPVob6dHaSI/WRnq0NtKjtZEerY30aG2kR2sjPVob6dHaSI/WRnq0NtKjtZEerY30aG2kR2sjPVob6dHaSI/WRnq0NtKjtZEerY30aG2kR2sjPVob6dHaSI/WRnq0NtKjtZEerY30aG2kR2sjPVob6dHaSI/WRnq0NtKjtdHmET1a9GjRo+X0LwMAAAAAAACAP7gA/uoa+w==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 2" width="100" height="80">
+  <object type="object" x="0" y="896" width="1216" height="64"/>
+  <object type="object" x="0" y="256" width="48" height="640">
    <properties>
     <property name="bodyType" value="StaticBody"/>
    </properties>
   </object>
-  <object name="Piso2" type="object" x="304" y="1008" width="384" height="16">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
-  <object name="Piso3" type="object" x="71" y="879" width="344" height="38">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
-  <object name="Piso4" type="object" x="325" y="764" width="355" height="57">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-    <property name="userData" value="platform"/>
-   </properties>
-  </object>
-  <object name="Wall1" type="object" x="-116" y="0" width="118" height="1274">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
-  <object name="Wall2" type="object" x="-118" y="-104" width="960" height="106">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
-  <object name="Wall3" type="object" x="718" y="4" width="126" height="1278">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
-  <object name="Wall4" type="object" x="-122" y="1276" width="972" height="74">
-   <properties>
-    <property name="bodyType" value="StaticBody"/>
-   </properties>
-  </object>
+  <object type="object" x="1168" y="256" width="48" height="640"/>
  </objectgroup>
 </map>

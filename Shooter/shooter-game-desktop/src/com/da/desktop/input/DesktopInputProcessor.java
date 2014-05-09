@@ -1,8 +1,6 @@
 package com.da.desktop.input;
 
 import com.badlogic.gdx.InputProcessor;
-import com.da.shooter.GameScreen;
-import com.da.shooter.elements.Avatar;
 
 
 /**
@@ -25,27 +23,27 @@ public class DesktopInputProcessor implements InputProcessor {
 	 */
 	@Override
 	public boolean keyDown(int keycode) {
-		GameScreen gameScreen = GameScreen.getInstance();
-		if(gameScreen.getAvatarId() == null) return false;
-		
-		switch(keycode){
-			case 19: //Up
-				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.JUMP);
-			break;
-			case 20: //Down
-			break;
-			case 21: //Left
-				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.LEFT);
-			break;
-			case 22: //Right
-				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.RIGHT);
-			break;
-			case 61: //Tab
-			break;
-			case 62: //Space
-				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.ACTION);
-			break;
-		}
+//		GameScreen gameScreen = GameScreen.getInstance();
+//		if(gameScreen.getAvatarId() == null) return false;
+//		
+//		switch(keycode){
+//			case 19: //Up
+//				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.JUMP);
+//			break;
+//			case 20: //Down
+//			break;
+//			case 21: //Left
+//				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.LEFT);
+//			break;
+//			case 22: //Right
+//				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.RIGHT);
+//			break;
+//			case 61: //Tab
+//			break;
+//			case 62: //Space
+//				GameScreen.getInstance().addAction(gameScreen.getAvatarId(), Avatar.Type.ACTION);
+//			break;
+//		}
 		return true;
 	}
 
@@ -55,26 +53,26 @@ public class DesktopInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		
-		GameScreen gameScreen = GameScreen.getInstance();
-		if(gameScreen.getAvatarId() == null) return false;
-		switch(keycode){
-		case 19: //Up
-			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.JUMP);
-		break;
-		case 20: //Down
-		break;
-		case 21: //Left
-			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.LEFT);
-		break;
-		case 22: //Right
-			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.RIGHT);
-		break;
-		case 61: //Tab
-		break;
-		case 62: //Space
-			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.ACTION);
-		break;
-	}
+//		GameScreen gameScreen = GameScreen.getInstance();
+//		if(gameScreen.getAvatarId() == null) return false;
+//		switch(keycode){
+//		case 19: //Up
+//			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.JUMP);
+//		break;
+//		case 20: //Down
+//		break;
+//		case 21: //Left
+//			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.LEFT);
+//		break;
+//		case 22: //Right
+//			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.RIGHT);
+//		break;
+//		case 61: //Tab
+//		break;
+//		case 62: //Space
+//			GameScreen.getInstance().removeAction(gameScreen.getAvatarId(), Avatar.Type.ACTION);
+//		break;
+//	}
 		return true;
 	}
 

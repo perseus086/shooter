@@ -21,20 +21,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.da.shooter.communication.CommunicationManager;
-import com.da.shooter.communication.Message;
 import com.da.shooter.communication.Player;
-import com.da.shooter.communication.processors.InputActionProcessor;
-import com.da.shooter.communication.processors.InputPositionsProcessor;
-import com.da.shooter.communication.processors.InputRequestIdProcessor;
-import com.da.shooter.communication.processors.InputRequestResponseProcessor;
-import com.da.shooter.communication.processors.OutputActionMessageProcessor;
-import com.da.shooter.communication.processors.OutputPositionsProcessor;
+import com.da.shooter.elements.Action;
 import com.da.shooter.elements.Avatar;
 import com.da.shooter.elements.Element;
 import com.da.shooter.elements.MapContactListener;
 import com.da.shooter.elements.Platform;
+import com.da.shooter.ui.ActionsList;
+import com.da.shooter.ui.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
 
@@ -51,6 +51,8 @@ public class GameScreen implements Screen {
 	public static GameScreen getInstance() {
 		return instance;
 	}
+	
+	private Stage stage;
 	
 	private Game game;
 	
@@ -73,16 +75,19 @@ public class GameScreen implements Screen {
 	private SpriteBatch spriteBatch;
 	
 	// Avatars
-	private Map<String,Avatar> avatars;
+	private Map<Integer,Avatar> avatars;
 //	private Avatar currentAvatar;
 //	private Map<String,List<Integer>> actions;
+	
+	// Actions box
+	ActionsList actionsList;
 	
 	private GameScreen(Game game, boolean creator){
 		this.game = game;
 		this.player = null;
 		this.creator = creator;
 		this.bodiesToDestroy = new ArrayList<Body>();
-		this.avatars = new HashMap<String, Avatar>();
+		this.avatars = new HashMap<Integer, Avatar>();
 		this.ownerPositions = null;
 //		this.actions = new HashMap<String, List<Integer>>();
 		this.status = GameStatus.PLAYING;
@@ -90,7 +95,7 @@ public class GameScreen implements Screen {
 	}
 	
 	public void newGame(){
-		avatars = new HashMap<String, Avatar>();
+		avatars = new HashMap<Integer, Avatar>();
 		
 		// Current player
 //		Avatar currentAvatar = new Avatar(true);
@@ -116,16 +121,17 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	private void executeAction(String avatarId, int gameAction){
-		if(avatars.containsKey(avatarId)){
-			Avatar avatar = this.avatars.get(avatarId);
-			avatar.executeAction(gameAction);
-		}
-	}
+//	private void executeAction(String avatarId, int gameAction){
+//		if(avatars.containsKey(avatarId)){
+//			Avatar avatar = this.avatars.get(avatarId);
+//			avatar.executeAction(gameAction);
+//		}
+//	}
 	
 	public Avatar createAvatar(Player player){
 		Avatar avatar = new Avatar(player);
-		avatar.createObject(new Vector2(30,100),world);
+		
+		avatar.createObject(new Vector2(30+30*player.getAvatarId(),40),world);
 		
 		this.avatars.put(player.getAvatarId(), avatar);
 		return avatar;
@@ -156,20 +162,60 @@ public class GameScreen implements Screen {
 		newGame();
 		
 		// Communication manager
-		CommunicationManager.getInstance().start();
+		
 		
 		// Get unique id
 		CommunicationManager.getInstance().requestAvatarId();
 		
-		if(instance.isCreator()){
-			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID, new InputRequestIdProcessor());
-			CommunicationManager.getInstance().addInputProcessor(Message.Type.ACTION, new InputActionProcessor());
-			CommunicationManager.getInstance().addOutputProcessor(new OutputPositionsProcessor());
-		}else{
-			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID_RESPONSE, new InputRequestResponseProcessor());
-			CommunicationManager.getInstance().addInputProcessor(Message.Type.POSITIONS, new InputPositionsProcessor());
-			CommunicationManager.getInstance().addOutputProcessor(new OutputActionMessageProcessor());
-		}
+		CommunicationManager.getInstance().start();
+		
+//		if(instance.isCreator()){
+//			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID, new InputRequestIdProcessor());
+//			CommunicationManager.getInstance().addInputProcessor(Message.Type.ACTION, new InputActionProcessor());
+//			CommunicationManager.getInstance().addOutputProcessor(new OutputPositionsProcessor());
+//		}else{
+//			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID_RESPONSE, new InputRequestResponseProcessor());
+//			CommunicationManager.getInstance().addInputProcessor(Message.Type.POSITIONS, new InputPositionsProcessor());
+//			CommunicationManager.getInstance().addOutputProcessor(new OutputActionMessageProcessor());
+//		}
+		
+		// Stage
+		stage = new Stage();
+		stage.clear();
+		Gdx.input.setInputProcessor(stage);
+
+		// Actions list
+		actionsList = new ActionsList(10, new float[]{5,Gdx.graphics.getHeight()/2}, stage);
+		
+		// Buttons
+		TextButton leftButton = ScreenUtils.createButton("Left",10 , 50);
+		TextButton rightButton = ScreenUtils.createButton("Right",110 , 50);
+		TextButton attackButton = ScreenUtils.createButton("Attack",Gdx.graphics.getWidth()-110 , 50);
+		stage.addActor(leftButton);
+		stage.addActor(rightButton);
+		stage.addActor(attackButton);
+
+		leftButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				CommunicationManager.getInstance().sendAction(new Action(player.getAvatarId(),Avatar.ActionType.LEFT, "Move left"));
+			}
+		});
+		
+		rightButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				CommunicationManager.getInstance().sendAction(new Action(player.getAvatarId(),Avatar.ActionType.RIGHT, "Move right"));
+			}
+		});
+		
+		attackButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				CommunicationManager.getInstance().sendAction(new Action(player.getAvatarId(),Avatar.ActionType.ACTION, "Attack"));
+			}
+		});
+		
 
 	}
 	
@@ -177,6 +223,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		stage.act(delta);
 		
 		// Box2D
 		world.step(Box2DConstants.STEP, Box2DConstants.VELOCITY_ITERATIONS, Box2DConstants.POSITION_ITERATIONS);  //delta? en lugar de 1/60f  de 6 a 8 y de 2 a 3
@@ -202,6 +249,8 @@ public class GameScreen implements Screen {
 		}
 		spriteBatch.end();
 		
+//		camera.zoom = 2.5f;
+		
 		// Input
 		if(Gdx.input.isKeyPressed(Input.Keys.Z)){
 			camera.zoom += 0.1f;
@@ -213,19 +262,30 @@ public class GameScreen implements Screen {
 		}
 		
 		// Continuous actions
-		if(this.creator){
-			if(this.checkStatus(GameStatus.PLAYING)){
-				for(String avatarId : avatars.keySet()){
-					List<Integer> actions = this.getActions(avatarId);
-					if(actions == null) continue;
-					for (int action : this.getActions(avatarId)) {
-						this.executeAction(avatarId,action);
-					}
-				}
+//		if(this.creator){
+//			if(this.checkStatus(GameStatus.PLAYING)){
+//				for(int avatarId : avatars.keySet()){
+//					List<Integer> actions = this.getActions(avatarId);
+//					if(actions == null) continue;
+//					for (int action : this.getActions(avatarId)) {
+//						this.executeAction(avatarId,action);
+//					}
+//				}
+//			}
+//		}
+		
+		Action action  = this.actionsList.peek();
+		if(action != null){
+			Avatar avatar = this.avatars.get(action.getAvatarId());
+			if(avatar.getBody().getLinearVelocity().len() == 0){
+				action  = this.actionsList.pop();
+				avatar.executeAction(action);
 			}
 		}
 		
-		camera.update();
+		
+//		System.out.println(camera.zoom);
+		
 		
 		// Destroy bodies
 //		if(!world.isLocked()){
@@ -244,7 +304,12 @@ public class GameScreen implements Screen {
 //			System.out.println("Aft:"+world.getBodyCount());
 //		}
 		// Sync bodis
-		syncPositions();
+//		syncPositions();
+		actionsList.update();
+		stage.draw();
+		
+		camera.update();
+		
 	}
 
 	public boolean checkStatus(int status) {
@@ -266,7 +331,7 @@ public class GameScreen implements Screen {
 		return creator;
 	}
 
-	public String getAvatarId() {
+	public Integer getAvatarId() {
 		if(player == null) return null;
 		return player.getAvatarId();
 	}
@@ -330,7 +395,7 @@ public class GameScreen implements Screen {
 		}
 	}
 
-	public Map<String, Avatar> getAvatars() {
+	public Map<Integer, Avatar> getAvatars() {
 		return avatars;
 	}
 
@@ -345,24 +410,28 @@ public class GameScreen implements Screen {
 		
 	}
 	
-	private void syncPositions(){
-		if(this.ownerPositions == null) return;
-		synchronized (ownerPositions) {
-			for (String avatarId : ownerPositions.keySet()) {
-				Player player = ownerPositions.get(avatarId);
-				Avatar avatar = null;
-				if(!this.avatars.containsKey(avatarId)){
-					avatar = createAvatar(player);
-					this.avatars.put(avatarId,avatar);
-				}else{
-					avatar = this.avatars.get(avatarId);
-				}
-					
-				avatar.getBody().setTransform(new Vector2(player.getBodyPos()[0], player.getBodyPos()[1]), 0);
-				avatar.getBody(Avatar.Constants.BODY_SWORD).setTransform(new Vector2(player.getSwordPos()[0], player.getSwordPos()[1]), player.getSwordPos()[2]);
-			}
-			ownerPositions = null;
-		}
+//	private void syncPositions(){
+//		if(this.ownerPositions == null) return;
+//		synchronized (ownerPositions) {
+//			for (String avatarId : ownerPositions.keySet()) {
+//				Player player = ownerPositions.get(avatarId);
+//				Avatar avatar = null;
+//				if(!this.avatars.containsKey(avatarId)){
+//					avatar = createAvatar(player);
+//					this.avatars.put(avatarId,avatar);
+//				}else{
+//					avatar = this.avatars.get(avatarId);
+//				}
+//					
+//				avatar.getBody().setTransform(new Vector2(player.getBodyPos()[0], player.getBodyPos()[1]), 0);
+//				avatar.getBody(Avatar.Constants.BODY_SWORD).setTransform(new Vector2(player.getSwordPos()[0], player.getSwordPos()[1]), player.getSwordPos()[2]);
+//			}
+//			ownerPositions = null;
+//		}
+//	}
+	
+	public void putAction(Action action) {
+		this.actionsList.addAction(action);
 	}
 	
 	// Status
@@ -380,7 +449,6 @@ public class GameScreen implements Screen {
 		Vector2 GRAVITY= new Vector2(0,-29.81f);
 		float TILED_UNIT_SCALE = 0.1f;//0.0625f;
 	}
-
 
 }
 

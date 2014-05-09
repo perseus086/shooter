@@ -1,21 +1,34 @@
 package com.da.shooter.communication;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.da.shooter.GameScreen;
-import com.da.shooter.communication.processors.InputMessageProcessor;
-import com.da.shooter.communication.processors.OutputMessageProcessor;
+//import com.da.shooter.communication.processors.InputMessageProcessor;
+//import com.da.shooter.communication.processors.OutputMessageProcessor;
 import com.da.shooter.communication.utils.IdGenerator;
+import com.da.shooter.communication.utils.TcpMessageUtils;
 import com.da.shooter.communication.utils.UdpMessageUtils;
+import com.da.shooter.elements.Action;
 
 public class CommunicationManager extends Thread{
 	
 	private static final int MESSAGE_LENGTH = 700;
+	
+	private static final int INPUT_PORT = 10000;
+	
+	private static final int SEQUENCER_PORT = 10000;
 
 	private static CommunicationManager instance;
 	
@@ -27,9 +40,11 @@ public class CommunicationManager extends Thread{
 		return instance;
 	}
 
-	private InetAddress creatorAddress;
+	private InetAddress sequencerAddress;
 	
-	private Map<String,Player> players;
+	private Socket sequencerSocket;
+	
+	private Map<Integer,Player> players;
 	
 	private int creatorPort;
 	
@@ -39,19 +54,28 @@ public class CommunicationManager extends Thread{
 	
 	private int status;
 	
-	private Map<Integer,InputMessageProcessor> inputProcessors;
-	private List<OutputMessageProcessor> outputProcessors;
+//	private Map<Integer,InputMessageProcessor> inputProcessors;
+//	private List<OutputMessageProcessor> outputProcessors;
 	
-	private CommunicationManager(String ownerUrl){
-		this.creatorAddress = getInetAddress(ownerUrl);
+//	private List<Socket> sockets;
+	private TreeMap<Integer,Message> msgInQueue;
+	private Queue<Message> msgOutQueue;
+	
+	private int lastMessage;
+	
+	private CommunicationManager(String sequencerUrl){
+		this.sequencerAddress = getInetAddress(sequencerUrl);
 		this.creator = GameScreen.getInstance().isCreator();
 		this.creatorPort = 10000;
 		this.playerPort = 10001;
 		
-		inputProcessors = new HashMap<Integer, InputMessageProcessor>();
-		outputProcessors = new ArrayList<OutputMessageProcessor>();
+//		inputProcessors = new HashMap<Integer, InputMessageProcessor>();
+//		outputProcessors = new ArrayList<OutputMessageProcessor>();
 		
-		players = new HashMap<String, Player>(); 
+		players = new HashMap<Integer, Player>();
+		
+		msgInQueue = new TreeMap<Integer,Message>() ;
+		msgOutQueue = new ConcurrentLinkedQueue<Message>();
 	}
 	
 	@Override
@@ -60,29 +84,106 @@ public class CommunicationManager extends Thread{
 		this.status = Status.RUNNING;
 	}
 	
+	public void sendAction(Action action){
+		Message msg = new Message(Message.Type.ACTION);
+		msg.setData(action);
+		synchronized (msgOutQueue) {
+			msgOutQueue.add(msg);
+			msgOutQueue.notifyAll();
+		}
+	}
+	
 	@Override
 	public void run(){
-		int lost_packets = 0;
-		while( this.status == Status.RUNNING || this.status == Status.WAITING){
-			if( this.status == Status.RUNNING && !GameScreen.getInstance().checkStatus(GameScreen.GameStatus.ENDED)){
-				if(receiveData()){
-					lost_packets = 0;
-//					CarGame.getInstance().setConnectionLost(false);
-				}else{
-					lost_packets++;
-				}
-//				if(CarGame.getInstance().checkStatus(CarGame.STATUS_PLAYING) && lost_packets >= PERMITED_MESSAGE_LOST){
-//					CarGame.getInstance().setConnectionLost(true);
+		
+//		(new Thread("Socket receiver"){
+//			public void run(){
+//				while(true){
+//					try {
+//						ServerSocket serverSocket = new ServerSocket(INPUT_PORT);
+//						sequencerSocket = serverSocket.accept();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
 //				}
-//				if(this.peerAddress != null){
-//					sendData();
-//				}
-			}
-			
-//			if(CarGame.getInstance().checkStatus(CarGame.STATUS_WAITING) && (System.currentTimeMillis() -this.waitingTime >= WAIT_TIME )){
-//				CarGame.getInstance().setWaitStop(true);
+//				
 //			}
-		}
+//		}).start();
+		
+		(new Thread("Message enqueuer"){
+			public void run(){
+				while(true){
+					try {
+						if(sequencerSocket != null){
+							Message msg = TcpMessageUtils.getMessage(sequencerSocket);
+							if(msg != null){
+								synchronized (msgInQueue) {
+									msgInQueue.put(msg.getNumber(),msg);
+									msgInQueue.notifyAll();
+								}
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}).start();
+		
+		(new Thread("Message consumer"){
+			public void run(){
+				while(true){
+					try {
+						synchronized (msgInQueue) {
+							if(msgInQueue.size() ==0 || msgInQueue.ceilingEntry(lastMessage) == null){
+								msgInQueue.wait(1000);
+							}else if(msgInQueue.size() > 0){
+								Message msg = msgInQueue.remove(msgInQueue.ceilingEntry(lastMessage).getKey());
+								
+								switch (msg.getType()) {
+									case Message.Type.NEW_PLAYER:
+										int avatarId = (Integer)msg.getData(); 
+										addPlayer(avatarId);
+									break;
+									case Message.Type.ACTION:
+										Action action = (Action)msg.getData();
+										GameScreen.getInstance().putAction(action);
+									break;
+									default:
+									break;
+								}
+								
+							}
+									
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}).start();
+		
+		(new Thread("Message sender"){
+			public void run(){
+				while(true){
+					try {
+						synchronized (msgOutQueue) {
+							while(msgOutQueue.size() == 0){
+								msgOutQueue.wait(1000);
+							}
+							Message msg = msgOutQueue.remove();
+							TcpMessageUtils.sendMessage(sequencerSocket, msg);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}).start();
+		
 	}
 
 //	private void sendData() {
@@ -101,12 +202,12 @@ public class CommunicationManager extends Thread{
 	
 	private boolean receiveData(){
 		
-		Message inMessage = UdpMessageUtils.receiveMessage((creator)?this.creatorPort:this.playerPort, MESSAGE_LENGTH, 20);
-		if(inMessage == null) return false; // No new message
-		if(this.inputProcessors.containsKey(inMessage.getType())){
-			this.inputProcessors.get(inMessage.getType()).addMessage(inMessage);
-			return true;
-		}
+//		Message inMessage = UdpMessageUtils.receiveMessage((creator)?this.creatorPort:this.playerPort, MESSAGE_LENGTH, 20);
+//		if(inMessage == null) return false; // No new message
+//		if(this.inputProcessors.containsKey(inMessage.getType())){
+//			this.inputProcessors.get(inMessage.getType()).addMessage(inMessage);
+//			return true;
+//		}
 		
 //		if(!CarGame.getInstance().getGameId().equals(inMessage.getGameId())) return false; // Message from other game
 //		if(inMessage.getTime() <= this.lastReceivedPlayerTime) return true; // Ignore old packet
@@ -128,15 +229,15 @@ public class CommunicationManager extends Thread{
 		return false;
 	}
 	
-	public void addInputProcessor(int messageType,InputMessageProcessor inputProcessor){
-		this.inputProcessors.put(messageType, inputProcessor);
-		inputProcessor.start();
-	}
-	
-	public void addOutputProcessor(OutputMessageProcessor outputProcessor){
-		this.outputProcessors.add(outputProcessor);
-		outputProcessor.start();
-	}
+//	public void addInputProcessor(int messageType,InputMessageProcessor inputProcessor){
+//		this.inputProcessors.put(messageType, inputProcessor);
+//		inputProcessor.start();
+//	}
+//	
+//	public void addOutputProcessor(OutputMessageProcessor outputProcessor){
+//		this.outputProcessors.add(outputProcessor);
+//		outputProcessor.start();
+//	}
 	
 	private InetAddress getInetAddress(String url){
 		try {
@@ -148,31 +249,28 @@ public class CommunicationManager extends Thread{
 	}
 	
 	public void requestAvatarId(){
-		if(GameScreen.getInstance().isCreator()){
-			GameScreen.getInstance().setPlayer(this.addPlayer(getInetAddress("localhost")));
-		}else{
-			(new Thread(){
-				@Override
-				public void run(){
-					while(GameScreen.getInstance().getAvatarId() == null){
-						Message msg = new Message(Message.Type.REQUEST_ID);
-						msg.setAddress(creatorAddress);
-						msg.setPort(creatorPort);
-						UdpMessageUtils.sendMessage(msg);
-						try {
-							sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}).start();
+		
+		try {
+			sequencerSocket = new Socket(this.sequencerAddress ,Sequencer.SEQUENCER_PORT);
+			Message msgOut = new Message(Message.Type.REQUEST_ID);
+			TcpMessageUtils.sendMessage(sequencerSocket, msgOut);
+			Message msgIn = TcpMessageUtils.getMessage(sequencerSocket);
+			int avatarId = (Integer)msgIn.getData();
+			Player player = addPlayer(avatarId);
+			GameScreen.getInstance().setPlayer(player);
+			
+			// Create other players
+			for(int i=1; i<avatarId;i++){
+				addPlayer(i);
+			}
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-
 	}
 	
 	public InetAddress getCreatorAddress() {
-		return creatorAddress;
+		return sequencerAddress;
 	}
 
 	public int getCreatorPort() {
@@ -183,18 +281,17 @@ public class CommunicationManager extends Thread{
 		return playerPort;
 	}
 	
-	public Map<String, Player> getPlayers() {
+	public Map<Integer, Player> getPlayers() {
 		return players;
 	}
 
-	public Player addPlayer(InetAddress address){
-		if(this.players.containsKey(address.getHostAddress())){
-			return this.players.get(address.getHostAddress());
+	public Player addPlayer(int avatarId){
+		if(this.players.containsKey(avatarId)){
+			return this.players.get(avatarId);
 		}
 		Player player = new Player();
-		player.setAddress(address);
-		player.setAvatarId(IdGenerator.generateId());
-		this.players.put(address.getHostName(), player);
+		player.setAvatarId(avatarId);
+		this.players.put(avatarId, player);
 		GameScreen.getInstance().createAvatar(player);
 		return player;
 	}

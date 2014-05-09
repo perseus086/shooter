@@ -115,12 +115,12 @@ public class Avatar implements Element,Comparable<Avatar>{
 	
 	public void right(){
 		this.direction = true;
-		this.getBody().applyLinearImpulse(new Vector2(300f,0), new Vector2(0, 0), true); //setLinearVelocity(10f, this.getBody().getLinearVelocity().y);
+		this.getBody().applyLinearImpulse(new Vector2(3000f,0), new Vector2(0, 0), true); //setLinearVelocity(10f, this.getBody().getLinearVelocity().y);
 	}
 	
 	public void left(){
 		this.direction = false;
-		this.getBody().applyLinearImpulse(new Vector2(-300f,0), new Vector2(0, 0), true);
+		this.getBody().applyLinearImpulse(new Vector2(-3000f,0), new Vector2(0, 0), true);
 	}
 	
 	public void strike(){
@@ -190,12 +190,16 @@ public class Avatar implements Element,Comparable<Avatar>{
 			break;
 		}
 		
+		// Speed
+		if(this.getBody().getLinearVelocity().len2() < 100){
+			this.getBody().setLinearVelocity(0, 0);
+		}
+		
 		// Sprites
 		renderSprites(delta,camera,spriteBatch);
 	}
 	
 	private void renderSprites(float delta, Camera camera,SpriteBatch spriteBatch){
-		if(actions == null) return;
 		
 		OrthographicCamera oCamera = (OrthographicCamera) camera;
 		
@@ -203,17 +207,17 @@ public class Avatar implements Element,Comparable<Avatar>{
 //		System.out.println(stateTime);
 		
 		TextureRegion region= null;
-		if(actions.contains(Type.ACTION) && (actions.contains(Type.LEFT)||!direction)){
+		if(this.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() > 0 && !direction){
 			region=animations.get("hit left ").getKeyFrame(stateTime, true);
-		}else if(actions.contains(Type.ACTION) && (actions.contains(Type.RIGHT) || direction)){
+		}else if(this.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() > 0 && direction){
 			region=animations.get("hit right ").getKeyFrame(stateTime, true);
-		}else if((actions.contains(Type.JUMP)|| !this.grounded) && (actions.contains(Type.LEFT)||!direction)){
+		}else if(!this.grounded && !direction){
 			region=animations.get("jump left ").getKeyFrame(2, true);
-		}else if((actions.contains(Type.JUMP)|| !this.grounded) && (actions.contains(Type.RIGHT) || direction)){
+		}else if(!this.grounded && direction){
 			region=animations.get("jump right ").getKeyFrame(2, true);
-		}else if(actions.contains(Type.LEFT)){
+		}else if(this.getBody().getLinearVelocity().x < -10){
 			region=animations.get("run left ").getKeyFrame(stateTime, true);
-		}else if(actions.contains(Type.RIGHT)){
+		}else if(this.getBody().getLinearVelocity().x > 10){
 			region=animations.get("run right ").getKeyFrame(stateTime, true);
 		}else if(direction){
 			region=animations.get("idle right ").getKeyFrame(stateTime, true);
@@ -240,18 +244,19 @@ public class Avatar implements Element,Comparable<Avatar>{
 		this.version++;
 	}
 	
-	public void executeAction(int gameAction){
-		switch (gameAction) {
-			case Type.JUMP:
+	public void executeAction(Action action){
+		stateTime = 0;
+		switch (action.getId()) {
+			case ActionType.JUMP:
 				jump();
 			break;
-			case Type.LEFT:
+			case ActionType.LEFT:
 				left();
 			break;
-			case Type.RIGHT:
+			case ActionType.RIGHT:
 				right();
 			break;
-			case Type.ACTION:
+			case ActionType.ACTION:
 				strike();
 			break;
 			default:
@@ -271,7 +276,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 
 	// Actions
-	public interface Type{
+	public interface ActionType{
 		int LEFT = 0;
 		int RIGHT = 1;
 		int JUMP = 2;

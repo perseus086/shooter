@@ -13,11 +13,11 @@ public class Message implements Serializable {
 	
 	protected int type;
 	
-	private int gameId;
+//	private int gameId;
 	
-	private int port;
+//	private int port;
 	
-	private String avatarId;
+//	private String avatarId;
 	
 	private int number;
 	
@@ -25,10 +25,10 @@ public class Message implements Serializable {
 	private Serializable data;
 	
 	/** The time. */
-	private long time;
+//	private long time;
 	
 	/** The address. */
-	private transient List<InetAddress> addresses;
+//	private transient List<InetAddress> addresses;
 
 	public Message(int type) {
 		super();
@@ -51,49 +51,49 @@ public class Message implements Serializable {
 		this.data = data;
 	}
 
-	public long getTime() {
-		return time;
-	}
+//	public long getTime() {
+//		return time;
+//	}
+//
+//	public void setTime(long time) {
+//		this.time = time;
+//	}
 
-	public void setTime(long time) {
-		this.time = time;
-	}
+//	public List<InetAddress> getAddresses() {
+//		return addresses;
+//	}
+//
+//	public void setAddresses(List<InetAddress> addresses) {
+//		this.addresses = addresses;
+//	}
+//	
+//	public void setAddress(InetAddress address){
+//		this.addresses = new ArrayList<InetAddress>(Arrays.asList(new InetAddress[]{address}));
+//	}
 
-	public List<InetAddress> getAddresses() {
-		return addresses;
-	}
-
-	public void setAddresses(List<InetAddress> addresses) {
-		this.addresses = addresses;
-	}
-	
-	public void setAddress(InetAddress address){
-		this.addresses = new ArrayList<InetAddress>(Arrays.asList(new InetAddress[]{address}));
-	}
-
-	public int getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
-	
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getAvatarId() {
-		return avatarId;
-	}
-
-	public void setAvatarId(String avatarId) {
-		this.avatarId = avatarId;
-	}
+//	public int getGameId() {
+//		return gameId;
+//	}
+//
+//	public void setGameId(int gameId) {
+//		this.gameId = gameId;
+//	}
+//	
+//	public int getPort() {
+//		return port;
+//	}
+//
+//	public void setPort(int port) {
+//		this.port = port;
+//	}
+//
+//	public String getAvatarId() {
+//		return avatarId;
+//	}
+//
+//	public void setAvatarId(String avatarId) {
+//		this.avatarId = avatarId;
+//	}
 
 	public int getNumber() {
 		return number;
@@ -108,5 +108,7 @@ public class Message implements Serializable {
 		int REQUEST_ID = 1;
 		int REQUEST_ID_RESPONSE = 2;
 		int POSITIONS = 3;
+		int REQUEST_MESSAGE_ID = 4;
+		int NEW_PLAYER = 5;
 	}
 }
