@@ -92,6 +92,7 @@ public class CommunicationManager extends Thread{
 	}
 	
 	public void sendMessage(Message msg){
+		if(GameScreen.getInstance().checkStatus(GameScreen.GameStatus.GAME_OVER)) return;
 		synchronized (msgOutQueue) {
 			msgOutQueue.add(msg);
 			msgOutQueue.notifyAll();

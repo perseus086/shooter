@@ -45,7 +45,9 @@ public class MapContactListener implements ContactListener {
 		if(sword != null && avatar != null){
 			System.out.println("Pitcher: "+sword.getOwner().getPlayer().getAvatarId()); 
 			System.out.println("Catcher: "+avatar.getPlayer().getAvatarId());
-			CommunicationManager.getInstance().sendLifeReduce(avatar.getPlayer().getAvatarId(),1);
+			if(GameScreen.getInstance().getAvatarId() == avatar.getPlayer().getAvatarId()){
+				CommunicationManager.getInstance().sendLifeReduce(avatar.getPlayer().getAvatarId(),1);
+			}
 		}
 		
 		// Avatar

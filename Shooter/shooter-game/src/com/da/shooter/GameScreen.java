@@ -13,6 +13,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -83,6 +84,9 @@ public class GameScreen implements Screen {
 	private ActionsList actionsList;
 	private float actionDelay;
 	
+	// Status
+	private BitmapFont gameOverFont;
+	
 	private GameScreen(MyShooterGame game, boolean creator){
 		this.game = game;
 		this.player = null;
@@ -147,6 +151,8 @@ public class GameScreen implements Screen {
 		box2DRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		spriteBatch = new SpriteBatch();
+		
+		gameOverFont = new BitmapFont(Gdx.files.internal("fonts/halo48orange.fnt"),false);
 		
 		//Tiled map
 		TiledMap map = new TmxMapLoader().load("maps/map.tmx");
@@ -231,7 +237,7 @@ public class GameScreen implements Screen {
 		world.step(Box2DConstants.STEP, Box2DConstants.VELOCITY_ITERATIONS, Box2DConstants.POSITION_ITERATIONS);  //delta? en lugar de 1/60f  de 6 a 8 y de 2 a 3
 		renderer.setView(camera);
 		renderer.render();
-		box2DRenderer.render(world, camera.combined);
+//		box2DRenderer.render(world, camera.combined);
 		
 		// Camera
 		if(this.player != null && this.avatars.containsKey(this.player.getAvatarId())){
@@ -249,6 +255,12 @@ public class GameScreen implements Screen {
 				((Element)body.getUserData()).render(delta,camera,spriteBatch);
 			}
 		}
+		
+		// Game over
+		if(this.checkStatus(GameScreen.GameStatus.GAME_OVER)){
+			gameOverFont.draw(spriteBatch,"GAME OVER", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+		}
+		
 		spriteBatch.end();
 		
 //		camera.zoom = 2.5f;
@@ -317,6 +329,8 @@ public class GameScreen implements Screen {
 //		syncPositions();
 		actionsList.update();
 		stage.draw();
+		
+		
 		
 		camera.update();
 		
@@ -446,7 +460,7 @@ public class GameScreen implements Screen {
 	
 	public void gameOver(int avatarId) {
 		if(avatarId == player.getAvatarId()){
-			this.game.setScreen(new GameOverScreen(game));
+			this.setStatus(GameScreen.GameStatus.GAME_OVER);
 		}else{
 			this.avatars.get(avatarId).getBody().setTransform(new Vector2(1000, 1000), 0);
 		}
@@ -458,6 +472,7 @@ public class GameScreen implements Screen {
 		int WAITING = 0;
 		int PLAYING = 1;
 		int ENDED = 2;
+		int GAME_OVER = 3;
 	}
 	
 	// Box2D constants
