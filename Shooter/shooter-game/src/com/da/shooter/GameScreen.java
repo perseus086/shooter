@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
 	public Avatar createAvatar(Player player){
 		Avatar avatar = new Avatar(player);
 		
-		avatar.createObject(new Vector2(30+30*player.getAvatarId(),40),world);
+		avatar.createObject(new Vector2(30*player.getAvatarId(),40),world);
 		
 		this.avatars.put(player.getAvatarId(), avatar);
 		return avatar;
