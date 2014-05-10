@@ -87,10 +87,22 @@ public class CommunicationManager extends Thread{
 	public void sendAction(Action action){
 		Message msg = new Message(Message.Type.ACTION);
 		msg.setData(action);
+		msg.setAvatarId(action.getAvatarId());
+		sendMessage(msg);
+	}
+	
+	public void sendMessage(Message msg){
 		synchronized (msgOutQueue) {
 			msgOutQueue.add(msg);
 			msgOutQueue.notifyAll();
 		}
+	}
+	
+	public void sendLifeReduce(int avatarId, int lifeReduce){
+		Message msg = new Message(Message.Type.LIFE_REDUCE);
+		msg.setAvatarId(avatarId);
+		msg.setData((Integer)lifeReduce);
+		sendMessage(msg);
 	}
 	
 	@Override
@@ -149,6 +161,11 @@ public class CommunicationManager extends Thread{
 									case Message.Type.ACTION:
 										Action action = (Action)msg.getData();
 										GameScreen.getInstance().putAction(action);
+									break;
+									case Message.Type.LIFE_REDUCE:
+										avatarId = msg.getAvatarId();
+										int lifeReduce = (Integer)msg.getData();
+										GameScreen.getInstance().reduceLife(avatarId,lifeReduce);
 									break;
 									default:
 									break;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.da.shooter.GameScreen;
+import com.da.shooter.communication.CommunicationManager;
 
 public class MapContactListener implements ContactListener {
 
@@ -44,6 +45,7 @@ public class MapContactListener implements ContactListener {
 		if(sword != null && avatar != null){
 			System.out.println("Pitcher: "+sword.getOwner().getPlayer().getAvatarId()); 
 			System.out.println("Catcher: "+avatar.getPlayer().getAvatarId());
+			CommunicationManager.getInstance().sendLifeReduce(avatar.getPlayer().getAvatarId(),1);
 		}
 		
 		// Avatar

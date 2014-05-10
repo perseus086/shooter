@@ -6,10 +6,12 @@ import java.net.Socket;
 
 public class SequencerProcessor extends Thread {
 	private Socket socket;
+	private Sequencer sequencer;
 
-	public SequencerProcessor(Socket socket) {
+	public SequencerProcessor(Sequencer sequencer, Socket socket) {
 		super();
 		this.socket = socket;
+		this.sequencer = sequencer;
 	}
 	
 	@Override
@@ -22,10 +24,10 @@ public class SequencerProcessor extends Thread {
 				System.out.println("Msg in: "+msg.getType());
 				if(msg.getType() == Message.Type.REQUEST_ID){
 					// Player number
-					msg.setData((Integer)Sequencer.getInstance().getNextPlayerId());
+					msg.setData((Integer)sequencer.getNextPlayerId());
 					
 					// Multicast message
-					for (Socket socketOut : Sequencer.getInstance().getSockets()) {
+					for (Socket socketOut : sequencer.getSockets()) {
 						if(!socket.equals(socketOut)){
 							msg.setType(Message.Type.NEW_PLAYER);
 						}
@@ -35,12 +37,12 @@ public class SequencerProcessor extends Thread {
 					}
 					System.out.println("Msg Out: new player "+(Integer)msg.getData());
 					
-				}else{
+				}else if(sequencer.allPlayersConnected()){
 					// Set message number
-					msg.setNumber(Sequencer.getInstance().getPosition());
+					msg.setNumber(sequencer.getPosition());
 					
 					// Multicast message
-					for (Socket socketOut : Sequencer.getInstance().getSockets()) {
+					for (Socket socketOut : sequencer.getSockets()) {
 						ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOut.getOutputStream());
 						objectOutputStream.writeObject(msg);
 						System.out.println("Msg in: "+msg.getType());

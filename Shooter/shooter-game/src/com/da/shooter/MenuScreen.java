@@ -20,7 +20,7 @@ public class MenuScreen implements Screen{
 	private MyShooterGame game;
 	
 	private Stage stage;
-	private TextButton createButton;
+	private TextButton sequencerButton;
 	private TextButton joinButton;
 	private TextButton configurationButton;
 	private BitmapFont haloFont;
@@ -62,34 +62,36 @@ public class MenuScreen implements Screen{
 		buttonStyle.down = skin.getDrawable("button1-down");
 		buttonStyle.font = haloFont;
 		
-		createButton = new TextButton("Create Game", buttonStyle);
-		createButton.setHeight(50f);
-		createButton.setWidth(350f);
-		createButton.setPosition(Gdx.graphics.getWidth()/2.0f - createButton.getWidth()/2, 4*Gdx.graphics.getHeight()/7.0f);
+		sequencerButton = new TextButton("Start sequencer", buttonStyle);
+		sequencerButton.setHeight(50f);
+		sequencerButton.setWidth(350f);
+		sequencerButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 4*Gdx.graphics.getHeight()/7.0f);
 		
 		joinButton = new TextButton("Join Game", buttonStyle);
 		joinButton.setHeight(50f);
 		joinButton.setWidth(350f);
-		joinButton.setPosition(Gdx.graphics.getWidth()/2.0f - createButton.getWidth()/2, 3*Gdx.graphics.getHeight()/7.0f);
+		joinButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 3*Gdx.graphics.getHeight()/7.0f);
 		
 		configurationButton = new TextButton("Configurations", buttonStyle);
 		configurationButton.setHeight(50f);
 		configurationButton.setWidth(350f);
-		configurationButton.setPosition(Gdx.graphics.getWidth()/2.0f - createButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
+		configurationButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
 		
 		
-		stage.addActor(createButton);
+		stage.addActor(sequencerButton);
 		stage.addActor(configurationButton);
 		stage.addActor(joinButton);
 		stage.addActor(label);
 		
-		createButton.addListener(new ChangeListener() {
+		sequencerButton.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				GameScreen.createInstance(game,true,"localhost");
-				game.setScreen(GameScreen.getInstance());
-				game.initInputListeners();
+				game.setScreen(new SequencerScreen(game));
+				
+//				GameScreen.createInstance(game,true,"localhost");
+//				game.setScreen(GameScreen.getInstance());
+//				game.initInputListeners();
 			}
 		});
 		

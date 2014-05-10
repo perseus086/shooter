@@ -80,7 +80,8 @@ public class GameScreen implements Screen {
 //	private Map<String,List<Integer>> actions;
 	
 	// Actions box
-	ActionsList actionsList;
+	private ActionsList actionsList;
+	private float actionDelay;
 	
 	private GameScreen(Game game, boolean creator){
 		this.game = game;
@@ -91,6 +92,7 @@ public class GameScreen implements Screen {
 		this.ownerPositions = null;
 //		this.actions = new HashMap<String, List<Integer>>();
 		this.status = GameStatus.PLAYING;
+		this.actionDelay = 0;
 		System.out.println("Game Screen");
 	}
 	
@@ -188,9 +190,9 @@ public class GameScreen implements Screen {
 		actionsList = new ActionsList(10, new float[]{5,Gdx.graphics.getHeight()/2}, stage);
 		
 		// Buttons
-		TextButton leftButton = ScreenUtils.createButton("Left",10 , 50);
-		TextButton rightButton = ScreenUtils.createButton("Right",110 , 50);
-		TextButton attackButton = ScreenUtils.createButton("Attack",Gdx.graphics.getWidth()-110 , 50);
+		TextButton leftButton = ScreenUtils.createButton("Left",10 , 50,100,50);
+		TextButton rightButton = ScreenUtils.createButton("Right",110 , 50,100,50);
+		TextButton attackButton = ScreenUtils.createButton("Attack",Gdx.graphics.getWidth()-110 , 50,100,50);
 		stage.addActor(leftButton);
 		stage.addActor(rightButton);
 		stage.addActor(attackButton);
@@ -275,12 +277,16 @@ public class GameScreen implements Screen {
 //		}
 		
 		Action action  = this.actionsList.peek();
-		if(action != null){
+//		System.out.println("delay:"+actionDelay);
+		if(action != null && actionDelay > 0.4){
+			actionDelay = 0;
 			Avatar avatar = this.avatars.get(action.getAvatarId());
-			if(avatar.getBody().getLinearVelocity().len() == 0){
+			if(avatar.getBody().getLinearVelocity().len() == 0 && avatar.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() == 0){
 				action  = this.actionsList.pop();
 				avatar.executeAction(action);
 			}
+		}else{
+			actionDelay+=delta;
 		}
 		
 		
@@ -448,6 +454,14 @@ public class GameScreen implements Screen {
 		int POSITION_ITERATIONS=2;
 		Vector2 GRAVITY= new Vector2(0,-29.81f);
 		float TILED_UNIT_SCALE = 0.1f;//0.0625f;
+	}
+
+	public void reduceLife(int avatarId, int lifeReduce) {
+		synchronized (avatars) {
+			Avatar avatar = avatars.get(avatarId);
+			avatar.reduceLife(lifeReduce);
+		}
+		
 	}
 
 }

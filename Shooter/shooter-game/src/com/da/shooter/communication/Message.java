@@ -17,7 +17,7 @@ public class Message implements Serializable {
 	
 //	private int port;
 	
-//	private String avatarId;
+	private int avatarId;
 	
 	private int number;
 	
@@ -87,13 +87,13 @@ public class Message implements Serializable {
 //		this.port = port;
 //	}
 //
-//	public String getAvatarId() {
-//		return avatarId;
-//	}
-//
-//	public void setAvatarId(String avatarId) {
-//		this.avatarId = avatarId;
-//	}
+	public int getAvatarId() {
+		return avatarId;
+	}
+
+	public void setAvatarId(int avatarId) {
+		this.avatarId = avatarId;
+	}
 
 	public int getNumber() {
 		return number;
@@ -110,5 +110,6 @@ public class Message implements Serializable {
 		int POSITIONS = 3;
 		int REQUEST_MESSAGE_ID = 4;
 		int NEW_PLAYER = 5;
+		int LIFE_REDUCE = 6;
 	}
 }

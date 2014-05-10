@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -66,6 +68,10 @@ public class Avatar implements Element,Comparable<Avatar>{
 	
 	private Player player;
 	
+	private int life;
+	
+	private BitmapFont lifeFont;
+	
 	public Avatar(Player player) {
 		this.player = player;
 		this.grounded = false;
@@ -73,6 +79,8 @@ public class Avatar implements Element,Comparable<Avatar>{
 		this.status = Constants.STATUS_NONE;
 		this.version = 0;
 		this.stateTime = 0;
+		this.life = 100;
+		
 	}
 	
 	public void createObject(Vector2 initPosition, World world){
@@ -91,7 +99,6 @@ public class Avatar implements Element,Comparable<Avatar>{
 		
 		
 		body.setUserData(this);
-		
 	}
 	
 	public void createSword(){
@@ -232,6 +239,19 @@ public class Avatar implements Element,Comparable<Avatar>{
 		float ratio = (float) (1.0/oCamera.zoom)*5;
 		
 		spriteBatch.draw(region,x,y,region.getRegionWidth()*ratio,region.getRegionHeight()*ratio);
+		
+		// Life
+		getLifeFont().setScale((float) (1.0/oCamera.zoom));
+		getLifeFont().draw(spriteBatch, this.life+"/100", x, y +60*ratio);
+//		font.draw(texture, x, y);
+		
+	}
+	
+	public BitmapFont getLifeFont(){
+		if(lifeFont == null){
+			lifeFont = new BitmapFont(Gdx.files.internal("fonts/white30bold.fnt"),false);
+		}
+		return lifeFont;
 	}
 	
 	public void addAction(int action){
@@ -273,6 +293,10 @@ public class Avatar implements Element,Comparable<Avatar>{
 
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public void reduceLife(int lifeReduce) {
+		this.life-=lifeReduce;
 	}
 
 	// Actions

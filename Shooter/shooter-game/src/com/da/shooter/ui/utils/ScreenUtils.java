@@ -5,16 +5,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 public class ScreenUtils {
-	public static TextButton createButton(String label, float x, float y){
+	
+	public static TextButton createButton(String label, float x, float y, float width, float height){
 		TextureAtlas atlas = new TextureAtlas("gui/gui.pack");
 		Skin skin = new Skin(atlas);
 		
@@ -25,8 +25,8 @@ public class ScreenUtils {
 		buttonStyle.font = new BitmapFont(Gdx.files.internal("fonts/halo.fnt"),false);
 		buttonStyle.font.setScale(0.5f);
 		TextButton textButton = new TextButton(label, buttonStyle);
-		textButton.setHeight(50f);
-		textButton.setWidth(100f);
+		textButton.setHeight(height);
+		textButton.setWidth(width);
 		textButton.setPosition(x, y);
 		
 		return textButton;
@@ -39,5 +39,22 @@ public class ScreenUtils {
 		label.setPosition(x,y);
 		
 		return label;
+	}
+	
+	public static TextField createTextField(String placeholder, float x, float y){
+		TextureAtlas atlas = new TextureAtlas("gui/gui.pack");
+		Skin skin = new Skin(atlas);
+		
+		BitmapFont white36nonoFont = new BitmapFont(Gdx.files.internal("fonts/white36mono.fnt"));
+		TextFieldStyle tfs = new TextFieldStyle();
+		tfs.font = white36nonoFont;
+		tfs.cursor = skin.getDrawable("cursor");
+		tfs.background = skin.getDrawable("textField");
+		tfs.fontColor = Color.WHITE;
+		TextField textField = new TextField(placeholder, tfs);
+		textField.setHeight(50);
+		textField.setWidth(300);
+		textField.setPosition(x, y);
+		return textField;
 	}
 }
