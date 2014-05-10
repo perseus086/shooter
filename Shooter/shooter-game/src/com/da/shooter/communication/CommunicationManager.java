@@ -105,6 +105,12 @@ public class CommunicationManager extends Thread{
 		sendMessage(msg);
 	}
 	
+	public void sendGameOver(int avatarId) {
+		Message msg = new Message(Message.Type.GAME_OVER);
+		msg.setAvatarId(avatarId);
+		sendMessage(msg);
+	}
+	
 	@Override
 	public void run(){
 		
@@ -166,6 +172,10 @@ public class CommunicationManager extends Thread{
 										avatarId = msg.getAvatarId();
 										int lifeReduce = (Integer)msg.getData();
 										GameScreen.getInstance().reduceLife(avatarId,lifeReduce);
+									break;
+									case Message.Type.GAME_OVER:
+										avatarId = msg.getAvatarId();
+										GameScreen.getInstance().gameOver(avatarId);
 									break;
 									default:
 									break;

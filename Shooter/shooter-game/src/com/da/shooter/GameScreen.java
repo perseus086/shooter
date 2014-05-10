@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
 
 	private static GameScreen instance;
 	
-	public static void createInstance(Game game, boolean creator, String ownerUrl){
+	public static void createInstance(MyShooterGame game, boolean creator, String ownerUrl){
 		
 		// Create instance
 		instance = new GameScreen(game,creator);
@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	
-	private Game game;
+	private MyShooterGame game;
 	
 	// Game info
 	private int gameId;
@@ -83,7 +83,7 @@ public class GameScreen implements Screen {
 	private ActionsList actionsList;
 	private float actionDelay;
 	
-	private GameScreen(Game game, boolean creator){
+	private GameScreen(MyShooterGame game, boolean creator){
 		this.game = game;
 		this.player = null;
 		this.creator = creator;
@@ -276,6 +276,11 @@ public class GameScreen implements Screen {
 //			}
 //		}
 		
+		Avatar myAvatar = this.avatars.get(player.getAvatarId());
+		if(myAvatar.getLife() <= 0){
+			CommunicationManager.getInstance().sendGameOver(player.getAvatarId());
+		}
+		
 		Action action  = this.actionsList.peek();
 //		System.out.println("delay:"+actionDelay);
 		if(action != null && actionDelay > 0.4){
@@ -288,7 +293,6 @@ public class GameScreen implements Screen {
 		}else{
 			actionDelay+=delta;
 		}
-		
 		
 //		System.out.println(camera.zoom);
 		
@@ -438,6 +442,15 @@ public class GameScreen implements Screen {
 	
 	public void putAction(Action action) {
 		this.actionsList.addAction(action);
+	}
+	
+	public void gameOver(int avatarId) {
+		if(avatarId == player.getAvatarId()){
+			this.game.setScreen(new GameOverScreen(game));
+		}else{
+			this.avatars.get(avatarId).getBody().setTransform(new Vector2(1000, 1000), 0);
+		}
+		// TODO Auto-generated method stub
 	}
 	
 	// Status

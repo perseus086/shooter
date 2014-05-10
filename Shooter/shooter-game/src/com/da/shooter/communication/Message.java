@@ -111,5 +111,6 @@ public class Message implements Serializable {
 		int REQUEST_MESSAGE_ID = 4;
 		int NEW_PLAYER = 5;
 		int LIFE_REDUCE = 6;
+		int GAME_OVER = 7;
 	}
 }

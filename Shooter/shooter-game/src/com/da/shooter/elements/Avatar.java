@@ -214,10 +214,11 @@ public class Avatar implements Element,Comparable<Avatar>{
 //		System.out.println(stateTime);
 		
 		TextureRegion region= null;
-		if(this.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() > 0 && !direction){
-			region=animations.get("hit left ").getKeyFrame(stateTime, true);
-		}else if(this.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() > 0 && direction){
-			region=animations.get("hit right ").getKeyFrame(stateTime, true);
+		
+		if(this.getBody(Avatar.Constants.BODY_SWORD).getAngle() != 0 && !direction){
+			region=animations.get("hit left ").getKeyFrame(stateTime*3f, true);
+		}else if(this.getBody(Avatar.Constants.BODY_SWORD).getAngle() != 0 && direction){
+			region=animations.get("hit right ").getKeyFrame(stateTime*3f, true);
 		}else if(!this.grounded && !direction){
 			region=animations.get("jump left ").getKeyFrame(2, true);
 		}else if(!this.grounded && direction){
@@ -299,6 +300,10 @@ public class Avatar implements Element,Comparable<Avatar>{
 		this.life-=lifeReduce;
 	}
 
+	public int getLife(){
+		return this.life;
+	}
+	
 	// Actions
 	public interface ActionType{
 		int LEFT = 0;
