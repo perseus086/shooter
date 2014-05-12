@@ -103,14 +103,6 @@ public class GameScreen implements Screen {
 	public void newGame(){
 		avatars = new HashMap<Integer, Avatar>();
 		
-		// Current player
-//		Avatar currentAvatar = new Avatar(true);
-//		currentAvatar.createObject(new Vector2(30,100),world);
-//		this.avatars.put(this.avatarId, currentAvatar);
-//		
-//		// Enemies
-//		(new Avatar(false)).createObject(new Vector2(50,100), world);
-		
 		// Contact listener
 		world.setContactListener(new MapContactListener(this));
 	}
@@ -126,13 +118,6 @@ public class GameScreen implements Screen {
 			this.avatars.get(avatarId).removeAction(avatarId, action);
 		}
 	}
-	
-//	private void executeAction(String avatarId, int gameAction){
-//		if(avatars.containsKey(avatarId)){
-//			Avatar avatar = this.avatars.get(avatarId);
-//			avatar.executeAction(gameAction);
-//		}
-//	}
 	
 	public Avatar createAvatar(Player player){
 		Avatar avatar = new Avatar(player);
@@ -170,22 +155,8 @@ public class GameScreen implements Screen {
 		newGame();
 		
 		// Communication manager
-		
-		
-		// Get unique id
-		CommunicationManager.getInstance().requestAvatarId();
-		
+		CommunicationManager.getInstance().requestAvatarId(); // Get unique id
 		CommunicationManager.getInstance().start();
-		
-//		if(instance.isCreator()){
-//			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID, new InputRequestIdProcessor());
-//			CommunicationManager.getInstance().addInputProcessor(Message.Type.ACTION, new InputActionProcessor());
-//			CommunicationManager.getInstance().addOutputProcessor(new OutputPositionsProcessor());
-//		}else{
-//			CommunicationManager.getInstance().addInputProcessor(Message.Type.REQUEST_ID_RESPONSE, new InputRequestResponseProcessor());
-//			CommunicationManager.getInstance().addInputProcessor(Message.Type.POSITIONS, new InputPositionsProcessor());
-//			CommunicationManager.getInstance().addOutputProcessor(new OutputActionMessageProcessor());
-//		}
 		
 		// Stage
 		stage = new Stage();

@@ -11,8 +11,12 @@ public class MainActivity extends AndroidApplication {
         super.onCreate(savedInstanceState);
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-        cfg.useGL20 = false;
+//        cfg.useGL20 = false;
         
-        initialize(new MyShooterGame(), cfg);
+        initialize(new MyShooterGame(){
+			public void initInputListeners(){
+				//app.getInput().setInputProcessor(new DesktopInputProcessor());
+			}
+		}, cfg);
     }
 }
