@@ -1,6 +1,5 @@
 package com.da.shooter;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 public class JoinGameScreen implements Screen{
 
@@ -27,9 +25,9 @@ public class JoinGameScreen implements Screen{
 	private TextButton testButton;
 	private TextButton menuButton;
 	private TextField textField;
-	private BitmapFont haloFont;
+	private BitmapFont font60;
 	private BitmapFont white36nonoFont;
-	private BitmapFont halo48orangeFont;
+	private BitmapFont font100orange;
 	private BitmapFont white30boldFont;
 	private TextureAtlas atlas;
 	private Skin skin;
@@ -66,9 +64,10 @@ public class JoinGameScreen implements Screen{
 				Gdx.input.setInputProcessor(stage);
 				
 				//Title label
-				halo48orangeFont = new BitmapFont(Gdx.files.internal("fonts/halo48orange.fnt"));		
-				titleLabel = new Label(this.title, new LabelStyle(halo48orangeFont, Color.WHITE));
-				titleLabel.setPosition(Gdx.graphics.getWidth()/2.0f - titleLabel.getWidth()/2, 6* Gdx.graphics.getHeight()/7.0f);
+				font100orange = new BitmapFont(Gdx.files.internal("fonts/prehistorik100orange.fnt"));		
+				titleLabel = new Label(this.title, new LabelStyle(font100orange, Color.WHITE));
+				titleLabel.setPosition(Gdx.graphics.getWidth()/2.0f - titleLabel.getWidth()/2, 5* Gdx.graphics.getHeight()/7.0f);
+				
 				//Textbox label
 				white30boldFont = new BitmapFont(Gdx.files.internal("fonts/white30bold.fnt"));		
 				label1 = new Label("IP adress of game creator:", new LabelStyle(white30boldFont, Color.WHITE));
@@ -83,22 +82,22 @@ public class JoinGameScreen implements Screen{
 				skin = new Skin(atlas);
 				
 				//Buttons
-				haloFont = new BitmapFont(Gdx.files.internal("fonts/halo.fnt"),false);
+				font60 = new BitmapFont(Gdx.files.internal("fonts/prehistorik60black.fnt"),false);
 				TextButtonStyle buttonStyle = new TextButtonStyle();
 				buttonStyle.up = skin.getDrawable("button1");
 				buttonStyle.over = skin.getDrawable("button1-over");
 				buttonStyle.down = skin.getDrawable("button1-down");
-				buttonStyle.font = haloFont;
+				buttonStyle.font = font60;
 				
 				testButton = new TextButton("Join Game", buttonStyle);
-				testButton.setHeight(50f);
-				testButton.setWidth(350f);
-				testButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 3*Gdx.graphics.getHeight()/7.0f);
+				testButton.setHeight(100f);
+				testButton.setWidth(500f);
+				testButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
 				
 				menuButton = new TextButton("Main Menu", buttonStyle);
-				menuButton.setHeight(50f);
-				menuButton.setWidth(350f);
-				menuButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
+				menuButton.setHeight(100f);
+				menuButton.setWidth(500f);
+				menuButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 1*Gdx.graphics.getHeight()/7.0f);
 				
 				//TextField
 				white36nonoFont = new BitmapFont(Gdx.files.internal("fonts/white36mono.fnt"));
@@ -169,9 +168,9 @@ public class JoinGameScreen implements Screen{
 	@Override
 	public void dispose() {
 		stage.dispose();
-		haloFont.dispose();
+		font60.dispose();
 		white36nonoFont.dispose();
-		halo48orangeFont.dispose();
+		font100orange.dispose();
 		
 	}
 

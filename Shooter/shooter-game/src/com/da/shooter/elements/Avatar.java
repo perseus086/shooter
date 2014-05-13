@@ -243,7 +243,7 @@ public class Avatar implements Element,Comparable<Avatar>{
 		
 		// Life
 		getLifeFont().setScale((float) (1.0/oCamera.zoom));
-		getLifeFont().draw(spriteBatch, this.life+"/100", x, y +60*ratio);
+		getLifeFont().draw(spriteBatch, Integer.toString(this.life), x+10*ratio, y +40*ratio);
 //		font.draw(texture, x, y);
 		
 	}

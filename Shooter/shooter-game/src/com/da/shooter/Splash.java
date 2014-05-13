@@ -1,6 +1,5 @@
 package com.da.shooter;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -13,19 +12,16 @@ public class Splash implements Screen {
 	
 	private MyShooterGame game;
 	private Texture splashImage;
-	private BitmapFont haloFont;
+	private BitmapFont font;
 	private SpriteBatch spriteBatch;
-	private final String gameName = "ULTRA KILL I";
+	private final String gameName = "- DEMO -";
 	
 	public Splash(MyShooterGame game){
 		this.game = game;
 		System.out.println("Splash Screen");
-		//No se cual es la diferencia entre poner
-		//en el constructor o en show() pero aqui 
-		//le puse en el constructor
 		
 		spriteBatch = new SpriteBatch();
-		haloFont = new BitmapFont(Gdx.files.internal("fonts/halo.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/prehistorik38.fnt"));
 		splashImage = new Texture(Gdx.files.internal("img/splash.png"));
 		
 	}
@@ -40,15 +36,16 @@ public class Splash implements Screen {
 					Gdx.graphics.getWidth()/2.0f - splashImage.getWidth()/2,
 					Gdx.graphics.getHeight()/2.0f - splashImage.getHeight()/2);
 			
-			haloFont.draw(spriteBatch,
+			font.draw(spriteBatch,
 					gameName, 
-					Gdx.graphics.getWidth()/2.0f - gameName.length()/2*haloFont.getLineHeight(), 
+					Gdx.graphics.getWidth()/2.0f - gameName.length()*10, 
 					7 * Gdx.graphics.getHeight()/8.0f);
-			//TOCA HACER UNA FUENTE MAS PEQUNA
-			haloFont.draw(spriteBatch,
-					"- PRESS ENTER OR TAP TO CONTINUE -", 
-					Gdx.graphics.getWidth()/2.0f - gameName.length()/2*haloFont.getLineHeight(), 
-					1 * Gdx.graphics.getHeight()/8.0f);
+
+			String msg = "- PRESS ENTER OR TAP TO CONTINUE -"; 
+			font.draw(spriteBatch,
+					msg, 
+					Gdx.graphics.getWidth()/2.0f - gameName.length()*47, 
+					2 * Gdx.graphics.getHeight()/8.0f);
 			
 		spriteBatch.end();
 		
@@ -86,7 +83,7 @@ public class Splash implements Screen {
 
 	@Override
 	public void dispose() {
-		haloFont.dispose();
+		font.dispose();
 		splashImage.dispose();
 		spriteBatch.dispose();
 	}

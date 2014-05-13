@@ -23,9 +23,9 @@ public class MenuScreen implements Screen{
 	private TextButton sequencerButton;
 	private TextButton joinButton;
 	private TextButton configurationButton;
-	private BitmapFont haloFont;
+	private BitmapFont font60;
 	private BitmapFont white36nonoFont;
-	private BitmapFont halo48orangeFont;
+	private BitmapFont font48orange;
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Label label;
@@ -46,40 +46,33 @@ public class MenuScreen implements Screen{
 		Gdx.input.setInputProcessor(stage);
 		
 		//Title label
-		halo48orangeFont = new BitmapFont(Gdx.files.internal("fonts/halo48orange.fnt"));		
-		label = new Label(this.title, new LabelStyle(halo48orangeFont, Color.WHITE));
-		label.setPosition(Gdx.graphics.getWidth()/2.0f - label.getWidth()/2, 6* Gdx.graphics.getHeight()/7.0f);
+		font48orange = new BitmapFont(Gdx.files.internal("fonts/prehistorik100orange.fnt"));		
+		label = new Label(this.title, new LabelStyle(font48orange, Color.WHITE));
+		label.setPosition(Gdx.graphics.getWidth()/2.0f - label.getWidth()/2, 5* Gdx.graphics.getHeight()/7.0f);
 				
 		//Atlas of the GUI
 		atlas = new TextureAtlas("gui/gui.pack");
 		skin = new Skin(atlas);
 		
 		//Buttons
-		haloFont = new BitmapFont(Gdx.files.internal("fonts/halo.fnt"),false);
+		font60 = new BitmapFont(Gdx.files.internal("fonts/prehistorik60black.fnt"),false);
 		TextButtonStyle buttonStyle = new TextButtonStyle();
 		buttonStyle.up = skin.getDrawable("button1");
 		buttonStyle.over = skin.getDrawable("button1-over");
 		buttonStyle.down = skin.getDrawable("button1-down");
-		buttonStyle.font = haloFont;
+		buttonStyle.font = font60;
 		
 		sequencerButton = new TextButton("Start sequencer", buttonStyle);
-		sequencerButton.setHeight(50f);
-		sequencerButton.setWidth(350f);
+		sequencerButton.setHeight(100f);
+		sequencerButton.setWidth(500f);
 		sequencerButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 4*Gdx.graphics.getHeight()/7.0f);
 		
 		joinButton = new TextButton("Join Game", buttonStyle);
-		joinButton.setHeight(50f);
-		joinButton.setWidth(350f);
+		joinButton.setHeight(100f);
+		joinButton.setWidth(500f);
 		joinButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 3*Gdx.graphics.getHeight()/7.0f);
 		
-		configurationButton = new TextButton("Configurations", buttonStyle);
-		configurationButton.setHeight(50f);
-		configurationButton.setWidth(350f);
-		configurationButton.setPosition(Gdx.graphics.getWidth()/2.0f - sequencerButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
-		
-		
 		stage.addActor(sequencerButton);
-		stage.addActor(configurationButton);
 		stage.addActor(joinButton);
 		stage.addActor(label);
 		
@@ -88,21 +81,9 @@ public class MenuScreen implements Screen{
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.setScreen(new SequencerScreen(game));
-				
-//				GameScreen.createInstance(game,true,"localhost");
-//				game.setScreen(GameScreen.getInstance());
-//				game.initInputListeners();
 			}
 		});
 		
-		
-		configurationButton.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new ConfigurationScreen(game));
-			}
-		});
 		
 		joinButton.addListener(new ChangeListener() {
 			
@@ -148,9 +129,9 @@ public class MenuScreen implements Screen{
 	@Override
 	public void dispose() {
 		stage.dispose();
-		haloFont.dispose();
+		font60.dispose();
 		white36nonoFont.dispose();
-		halo48orangeFont.dispose();
+		font48orange.dispose();
 		
 	}
 

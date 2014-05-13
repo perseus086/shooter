@@ -22,8 +22,7 @@ public class ScreenUtils {
 		buttonStyle.up = skin.getDrawable("button1");
 		buttonStyle.over = skin.getDrawable("button1-over");
 		buttonStyle.down = skin.getDrawable("button1-down");
-		buttonStyle.font = new BitmapFont(Gdx.files.internal("fonts/halo.fnt"),false);
-		buttonStyle.font.setScale(0.5f);
+		buttonStyle.font = new BitmapFont(Gdx.files.internal("fonts/prehistorik60black.fnt"),false);
 		TextButton textButton = new TextButton(label, buttonStyle);
 		textButton.setHeight(height);
 		textButton.setWidth(width);

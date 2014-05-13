@@ -7,7 +7,6 @@ import java.util.Map;
 
 import net.dermetfan.utils.libgdx.box2d.Box2DMapObjectParser;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -55,8 +54,6 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	
-	private MyShooterGame game;
-	
 	// Game info
 	private int gameId;
 	private Map<String, Player> ownerPositions;
@@ -88,7 +85,6 @@ public class GameScreen implements Screen {
 	private BitmapFont gameOverFont;
 	
 	private GameScreen(MyShooterGame game, boolean creator){
-		this.game = game;
 		this.player = null;
 		this.creator = creator;
 		this.bodiesToDestroy = new ArrayList<Body>();
@@ -137,7 +133,7 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		spriteBatch = new SpriteBatch();
 		
-		gameOverFont = new BitmapFont(Gdx.files.internal("fonts/halo48orange.fnt"),false);
+		gameOverFont = new BitmapFont(Gdx.files.internal("fonts/prehistorik100orange.fnt"),false);
 		
 		//Tiled map
 		TiledMap map = new TmxMapLoader().load("maps/map.tmx");
@@ -148,7 +144,7 @@ public class GameScreen implements Screen {
 		}
 		
 		camera.translate(363, 457);
-//		camera.zoom = 26.3f;
+		camera.zoom = 1.8f;
 		
 		renderer = new OrthogonalTiledMapRenderer(map, parser.getUnitScale());
 		
@@ -164,12 +160,12 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 
 		// Actions list
-		actionsList = new ActionsList(10, new float[]{5,Gdx.graphics.getHeight()/2}, stage);
+		actionsList = new ActionsList(7, new float[]{Gdx.graphics.getWidth()/2 - 100,20}, stage);
 		
 		// Buttons
-		TextButton leftButton = ScreenUtils.createButton("Left",10 , 50,100,50);
-		TextButton rightButton = ScreenUtils.createButton("Right",110 , 50,100,50);
-		TextButton attackButton = ScreenUtils.createButton("Attack",Gdx.graphics.getWidth()-110 , 50,100,50);
+		TextButton leftButton = ScreenUtils.createButton("Left",10 , 50,200,80);
+		TextButton rightButton = ScreenUtils.createButton("Right",210 , 50,200,80);
+		TextButton attackButton = ScreenUtils.createButton("Attack",Gdx.graphics.getWidth()-210 , 50,200,80);
 		stage.addActor(leftButton);
 		stage.addActor(rightButton);
 		stage.addActor(attackButton);
@@ -229,12 +225,13 @@ public class GameScreen implements Screen {
 		
 		// Game over
 		if(this.checkStatus(GameScreen.GameStatus.GAME_OVER)){
-			gameOverFont.draw(spriteBatch,"GAME OVER", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+			String msg = "GAME OVER";
+			gameOverFont.draw(spriteBatch,msg, Gdx.graphics.getWidth()/2 - msg.length()*10, Gdx.graphics.getHeight()/2);
 		}
 		
 		spriteBatch.end();
 		
-//		camera.zoom = 2.5f;
+//		camera.zoom = 1.8f;
 		
 		// Input
 		if(Gdx.input.isKeyPressed(Input.Keys.Z)){
@@ -435,7 +432,6 @@ public class GameScreen implements Screen {
 		}else{
 			this.avatars.get(avatarId).getBody().setTransform(new Vector2(1000, 1000), 0);
 		}
-		// TODO Auto-generated method stub
 	}
 	
 	// Status
