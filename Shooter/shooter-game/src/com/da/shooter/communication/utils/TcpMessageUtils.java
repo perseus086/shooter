@@ -16,7 +16,7 @@ public class TcpMessageUtils {
 			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 			Message msg = (Message) objectInputStream.readObject();
 //			objectInputStream.close();
-			System.out.println("MSG IN: "+msg.getType());
+			System.out.println("[Client][IN]: "+msg.getMessageTypeName());
 			return msg;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -28,6 +28,7 @@ public class TcpMessageUtils {
 		try {
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			objectOutputStream.writeObject(msg);
+			System.out.println("[Client][OUT]: "+msg.getMessageTypeName());
 //			objectOutputStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();

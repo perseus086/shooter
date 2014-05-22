@@ -129,7 +129,8 @@ public class CommunicationManager extends Thread{
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						System.err.println("[Client][Error]: Senquencer can not be reached.");
+//						e.printStackTrace();
 					}
 				}
 				
