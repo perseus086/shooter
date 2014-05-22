@@ -62,7 +62,9 @@ public class SequencerProcessor extends Thread {
 				this.status = STATUS_STOP;
 //				ex.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("[SEQ][Error]: Player disconnected or network faillure.");
+				this.status = STATUS_STOP;
+//				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 //				e.printStackTrace();
 			}

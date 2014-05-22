@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.da.shooter.elements.Action;
+import com.da.shooter.elements.Avatar;
+
 
 public class Message implements Serializable {
 
@@ -125,6 +128,16 @@ public class Message implements Serializable {
 			case Type.LIFE_REDUCE: return "LIFE_REDUCE";
 			case Type.GAME_OVER: return "GAME_OVER";
 			default: return "NO_TYPE";
+		}
+	}
+	
+	public String getMessageDetails(){
+		switch (this.type) {
+			case Type.ACTION:
+				Action action = (Action) this.getData();
+				return "player_id:"+this.getAvatarId()+" | action:"+action.getName();
+			default:
+				return "";
 		}
 	}
 }

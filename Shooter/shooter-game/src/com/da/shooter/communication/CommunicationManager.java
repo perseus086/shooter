@@ -279,8 +279,9 @@ public class CommunicationManager extends Thread{
 				addPlayer(i);
 			}
 			
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (Exception e1) {
+			System.err.println("[Client][Error]: Senquencer can not be reached.");
+//			e1.printStackTrace();
 		}
 	}
 	
