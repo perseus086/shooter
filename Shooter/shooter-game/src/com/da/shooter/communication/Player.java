@@ -10,10 +10,15 @@ public class Player implements Serializable {
 
 	private int status;
 	
+	
+	
 //	private float[] bodyPos;
 //	private float[] swordPos;
 	
-//	@Transient
+	public Player() {
+		this.status = Status.PLAYING;
+	}
+	//	@Transient
 //	public InetAddress getAddress() {
 //		return address;
 //	}
@@ -53,7 +58,8 @@ public class Player implements Serializable {
 //	}
 	
 	public interface Status{
-		int GAME_OVER = 0;
+		int PLAYING = 0;
+		int GAME_OVER = 1;
 	}
 	
 }
