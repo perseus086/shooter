@@ -1,11 +1,5 @@
 package com.da.shooter.elements;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -37,14 +31,14 @@ public class MapContactListener implements ContactListener {
 	 */
 	@Override
 	public void beginContact(Contact contact) {
-		Bullet bullet= (Bullet) getObject(Bullet.class,contact);
+//		Bullet bullet= (Bullet) getObject(Bullet.class,contact);
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
-		Platform platform = (Platform) getObject(Platform.class,contact);
+//		Platform platform = (Platform) getObject(Platform.class,contact);
 		Sword sword= (Sword) getObject(Sword.class,contact);
 				
 		if(sword != null && avatar != null){
-			System.out.println("Pitcher: "+sword.getOwner().getPlayer().getAvatarId()); 
-			System.out.println("Catcher: "+avatar.getPlayer().getAvatarId());
+//			System.out.println("Pitcher: "+sword.getOwner().getPlayer().getAvatarId()); 
+//			System.out.println("Catcher: "+avatar.getPlayer().getAvatarId());
 			if(GameScreen.getInstance().getAvatarId() == avatar.getPlayer().getAvatarId()){
 				CommunicationManager.getInstance().sendLifeReduce(avatar.getPlayer().getAvatarId(),1);
 			}
@@ -75,7 +69,7 @@ public class MapContactListener implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 ////		System.out.println("Tspeed:"+Arrays.toString(contactImpulse.getNormalImpulses())+","+Arrays.toString(contactImpulse.getTangentImpulses()));
 		Avatar avatar= (Avatar) getObject(Avatar.class,contact);
-		Sword sword= (Sword) getObject(Sword.class,contact);
+//		Sword sword= (Sword) getObject(Sword.class,contact);
 		Platform platform = (Platform) getObject(Platform.class,contact);
 		
 		if(avatar != null && platform != null){

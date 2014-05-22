@@ -30,7 +30,7 @@ public class SequencerProcessor extends Thread {
 				ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 				Message msg = (Message) objectInputStream.readObject();
 				
-				System.out.println("[SEQ][In]["+socket.getInetAddress().getHostAddress()+"]: "+msg.getType());
+				System.out.println("[SEQ][In]["+socket.getInetAddress().getHostAddress()+"]: "+msg.getMessageTypeName());
 				if(msg.getType() == Message.Type.REQUEST_ID){
 					// Player number
 					msg.setData((Integer)sequencer.getNextPlayerId());
@@ -55,7 +55,7 @@ public class SequencerProcessor extends Thread {
 						ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOut.getOutputStream());
 						objectOutputStream.writeObject(msg);
 					}
-					System.out.println("[SEQ][Out][Multicast]: Order assigned "+(Integer)msg.getNumber());
+					System.out.println("[SEQ][Out][Multicast]: Order assigned "+(Integer)msg.getNumber()+ "| "+msg.getMessageTypeName());
 				}
 			}catch(EOFException ex){
 				System.out.println("[SEQ][Error]: Player disconnected or network faillure.");

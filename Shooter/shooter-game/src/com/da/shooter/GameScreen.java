@@ -430,6 +430,7 @@ public class GameScreen implements Screen {
 	
 	public void gameOver(int avatarId) {
 		if(avatarId == player.getAvatarId()){
+			this.avatars.get(avatarId).getBody().setTransform(new Vector2(1000, 1000), 0);
 			this.setStatus(GameScreen.GameStatus.GAME_OVER);
 		}else{
 			this.avatars.get(avatarId).getBody().setTransform(new Vector2(1000, 1000), 0);

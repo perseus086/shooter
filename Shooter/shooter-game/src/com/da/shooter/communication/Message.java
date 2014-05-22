@@ -113,4 +113,18 @@ public class Message implements Serializable {
 		int LIFE_REDUCE = 6;
 		int GAME_OVER = 7;
 	}
+	
+	public String getMessageTypeName(){
+		switch (this.type) {
+			case Type.ACTION: return "ACTION";
+			case Type.REQUEST_ID: return "REQUEST_ID";
+			case Type.REQUEST_ID_RESPONSE: return "REQUEST_ID_RESPONSE";
+			case Type.POSITIONS: return "POSITIONS";
+			case Type.REQUEST_MESSAGE_ID: return "REQUEST_MESSAGE_ID";
+			case Type.NEW_PLAYER: return "NEW_PLAYER";
+			case Type.LIFE_REDUCE: return "LIFE_REDUCE";
+			case Type.GAME_OVER: return "GAME_OVER";
+			default: return "NO_TYPE";
+		}
+	}
 }
