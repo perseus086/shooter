@@ -258,10 +258,15 @@ public class GameScreen implements Screen {
 //			}
 //		}
 		
+		// Game over
 		Avatar myAvatar = this.avatars.get(player.getAvatarId());
 		if(myAvatar.getLife() <= 0){
 			CommunicationManager.getInstance().sendGameOver(player.getAvatarId());
-			
+		}
+		for (Avatar avatar : this.getAvatars().values()) {
+			if(avatar.getPlayer() != null && avatar.getPlayer().getStatus() == Player.Status.GAME_OVER){
+				avatar.getBody().setTransform(new Vector2(1000, 1000), 0);
+			}
 		}
 		
 		Action action  = this.actionsList.peek();
@@ -431,7 +436,7 @@ public class GameScreen implements Screen {
 	
 	public void gameOver(int avatarId) {
 		Avatar avatar = this.avatars.get(avatarId);
-		avatar.getBody().setTransform(new Vector2(1000, 1000), 0);
+//		avatar.getBody().setTransform(new Vector2(1000, 1000), 0);
 		avatar.getPlayer().setStatus(Player.Status.GAME_OVER);
 		if(avatarId == player.getAvatarId()){
 			this.setStatus(GameScreen.GameStatus.GAME_OVER);
