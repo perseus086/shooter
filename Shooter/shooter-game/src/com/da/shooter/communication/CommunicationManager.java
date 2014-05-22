@@ -2,33 +2,19 @@ package com.da.shooter.communication;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.da.shooter.GameScreen;
-//import com.da.shooter.communication.processors.InputMessageProcessor;
-//import com.da.shooter.communication.processors.OutputMessageProcessor;
-import com.da.shooter.communication.utils.IdGenerator;
 import com.da.shooter.communication.utils.TcpMessageUtils;
-import com.da.shooter.communication.utils.UdpMessageUtils;
 import com.da.shooter.elements.Action;
 
 public class CommunicationManager extends Thread{
-	
-	private static final int MESSAGE_LENGTH = 700;
-	
-	private static final int INPUT_PORT = 10000;
-	
-	private static final int SEQUENCER_PORT = 10000;
 
 	private static CommunicationManager instance;
 	
