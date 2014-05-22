@@ -259,7 +259,7 @@ public class GameScreen implements Screen {
 //		}
 		
 		// Game over
-		if(this.avatars.containsKey(player.getAvatarId())){
+		if(this.avatars!= null && player != null && this.avatars.containsKey(player.getAvatarId())){
 			Avatar myAvatar = this.avatars.get(player.getAvatarId());
 			if(myAvatar.getLife() <= 0){
 				CommunicationManager.getInstance().sendGameOver(player.getAvatarId());
