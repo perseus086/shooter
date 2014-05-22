@@ -135,7 +135,7 @@ public class Message implements Serializable {
 		switch (this.type) {
 			case Type.ACTION:
 				Action action = (Action) this.getData();
-				return "player_id:"+this.getAvatarId()+" | action:"+action.getName();
+				return " player_id:"+this.getAvatarId()+" | action:"+action.getName();
 			default:
 				return "";
 		}

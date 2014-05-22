@@ -30,7 +30,7 @@ public class SequencerProcessor extends Thread {
 				ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 				Message msg = (Message) objectInputStream.readObject();
 				
-				System.out.println("[SEQ][In]["+socket.getInetAddress().getHostAddress()+"]: "+msg.getMessageTypeName());
+				System.out.println("[SEQ][In]["+socket.getInetAddress().getHostAddress()+"]: "+msg.getMessageTypeName()+" | "+msg.getMessageDetails());
 				if(msg.getType() == Message.Type.REQUEST_ID){
 					// Player number
 					msg.setData((Integer)sequencer.getNextPlayerId());
@@ -44,7 +44,7 @@ public class SequencerProcessor extends Thread {
 						objectOutputStream.writeObject(msg);
 						
 					}
-					System.out.println("[SEQ][Out][Multicast]: New player "+(Integer)msg.getData());
+					System.out.println("[SEQ][Out][Multicast]: New player "+(Integer)msg.getData()+" | "+msg.getMessageDetails());
 					
 				}else if(sequencer.allPlayersConnected()){
 					// Set message number
