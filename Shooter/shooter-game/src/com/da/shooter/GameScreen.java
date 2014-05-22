@@ -38,6 +38,8 @@ import com.da.shooter.ui.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
 
+	private static final float ACTIONS_DELAY = 0.01f;
+
 	private static GameScreen instance;
 	
 	public static void createInstance(MyShooterGame game, boolean creator, String ownerUrl){
@@ -263,7 +265,7 @@ public class GameScreen implements Screen {
 		
 		Action action  = this.actionsList.peek();
 //		System.out.println("delay:"+actionDelay);
-		if(action != null && actionDelay > 0.4){
+		if(action != null && actionDelay > GameScreen.ACTIONS_DELAY){
 			actionDelay = 0;
 			Avatar avatar = this.avatars.get(action.getAvatarId());
 			if(avatar.getBody().getLinearVelocity().len() == 0 && avatar.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() == 0){
