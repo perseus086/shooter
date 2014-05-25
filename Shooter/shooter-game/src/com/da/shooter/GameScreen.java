@@ -267,9 +267,14 @@ public class GameScreen implements Screen {
 		if(action != null && actionDelay > GameScreen.ACTIONS_DELAY){
 			actionDelay = 0;
 			Avatar avatar = this.avatars.get(action.getAvatarId());
-			if(avatar.getBody().getLinearVelocity().len() == 0 && avatar.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() == 0){
+			if(Player.Status.GAME_OVER == avatar.getPlayer().getStatus()){
+				// Ignore game over players
 				action  = this.actionsList.pop();
-				avatar.executeAction(action);
+			}else{
+				if(avatar.getBody().getLinearVelocity().len() == 0 && avatar.getBody(Avatar.Constants.BODY_SWORD).getAngularVelocity() == 0){
+					action  = this.actionsList.pop();
+					avatar.executeAction(action);
+				}
 			}
 		}else{
 			actionDelay+=delta;
