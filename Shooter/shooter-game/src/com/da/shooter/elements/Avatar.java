@@ -1,5 +1,6 @@
 package com.da.shooter.elements;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -242,8 +243,20 @@ public class Avatar implements Element,Comparable<Avatar>{
 		spriteBatch.draw(region,x,y,region.getRegionWidth()*ratio,region.getRegionHeight()*ratio);
 		
 		// Life
+		if(this.life > 50){
+			getLifeFont().setColor(0,1,0,1);
+		}else{
+			getLifeFont().setColor(1,0,0,1);
+		}
 		getLifeFont().setScale((float) (1.0/oCamera.zoom));
 		getLifeFont().draw(spriteBatch, Integer.toString(this.life), x+10*ratio, y +40*ratio);
+		
+		// Name
+		if(this.getPlayer().getUsername() != null){
+			getLifeFont().setColor(0.5f,0.5f,0.5f,1);
+			getLifeFont().draw(spriteBatch, this.getPlayer().getUsername(), x+10*ratio, y +50*ratio);
+		}
+		
 //		font.draw(texture, x, y);
 		
 	}
@@ -266,6 +279,9 @@ public class Avatar implements Element,Comparable<Avatar>{
 	}
 	
 	public void executeAction(Action action){
+		if(this.getPlayer().getUsername() == null){
+			this.getPlayer().setUsername(action.getUsername());
+		}
 		stateTime = 0;
 		switch (action.getId()) {
 			case ActionType.JUMP:

@@ -9,24 +9,12 @@ public class Player implements Serializable {
 	private int avatarId;
 
 	private int status;
-	
-	
-	
-//	private float[] bodyPos;
-//	private float[] swordPos;
+	private String username;
 	
 	public Player() {
 		this.status = Status.PLAYING;
 	}
-	//	@Transient
-//	public InetAddress getAddress() {
-//		return address;
-//	}
-//	
-//	@Transient
-//	public void setAddress(InetAddress address) {
-//		this.address = address;
-//	}
+
 	public int getAvatarId() {
 		return avatarId;
 	}
@@ -40,23 +28,16 @@ public class Player implements Serializable {
 	public int getStatus() {
 		return status;
 	}
-
-//	public float[] getBodyPos() {
-//		return bodyPos;
-//	}
-//
-//	public void setBodyPos(float[] bodyPos) {
-//		this.bodyPos = bodyPos;
-//	}
-//
-//	public float[] getSwordPos() {
-//		return swordPos;
-//	}
-//
-//	public void setSwordPos(float[] swordPos) {
-//		this.swordPos = swordPos;
-//	}
 	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
 	public interface Status{
 		int PLAYING = 0;
 		int GAME_OVER = 1;

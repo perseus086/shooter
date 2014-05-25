@@ -16,15 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.da.shooter.ui.utils.ScreenUtils;
 
 public class JoinGameScreen implements Screen{
 
 	private MyShooterGame game;
 	
 	private Stage stage;
-	private TextButton testButton;
+	private TextButton joinButton;
 	private TextButton menuButton;
-	private TextField textField;
+	private TextField inputAddress;
 	private BitmapFont font60;
 	private BitmapFont white36nonoFont;
 	private BitmapFont font100orange;
@@ -33,7 +34,6 @@ public class JoinGameScreen implements Screen{
 	private Skin skin;
 	private Label titleLabel;
 	private Label label1;
-	private Label message;
 	private String title;
 	
 	public JoinGameScreen(MyShooterGame game){
@@ -66,16 +66,19 @@ public class JoinGameScreen implements Screen{
 				//Title label
 				font100orange = new BitmapFont(Gdx.files.internal("fonts/prehistorik100orange.fnt"));		
 				titleLabel = new Label(this.title, new LabelStyle(font100orange, Color.WHITE));
-				titleLabel.setPosition(Gdx.graphics.getWidth()/2.0f - titleLabel.getWidth()/2, 5* Gdx.graphics.getHeight()/7.0f);
+				titleLabel.setPosition(Gdx.graphics.getWidth()/2.0f - titleLabel.getWidth()/2, 7.1f* Gdx.graphics.getHeight()/9.0f);
 				
 				//Textbox label
 				white30boldFont = new BitmapFont(Gdx.files.internal("fonts/white30bold.fnt"));		
 				label1 = new Label("IP adress of game creator:", new LabelStyle(white30boldFont, Color.WHITE));
-				label1.setPosition(Gdx.graphics.getWidth()/2.0f-label1.getWidth()/2, 4* Gdx.graphics.getHeight()/7.0f+60);
+				label1.setPosition(Gdx.graphics.getWidth()/2.0f-label1.getWidth()/2, 6* Gdx.graphics.getHeight()/9.0f);
 				
-				message = new Label("E", new LabelStyle(white30boldFont, Color.WHITE));
-				message.setPosition(Gdx.graphics.getWidth()/2.0f-message.getWidth()/2, 1* Gdx.graphics.getHeight()/7.0f);
-				message.setText("");
+				// Username
+				Label usernameLabel = ScreenUtils.createLabel("Username:", 0, 0);
+				usernameLabel.setPosition(Gdx.graphics.getWidth()/2f - usernameLabel.getWidth()/2f, 4*Gdx.graphics.getHeight()/9.0f);
+				
+				final TextField usernameInput = ScreenUtils.createTextField("", 0, 0);
+				usernameInput.setPosition(Gdx.graphics.getWidth()/2f - usernameInput.getWidth()/2f, 3*Gdx.graphics.getHeight()/9.0f);
 				
 				//Atlas of the GUI
 				atlas = new TextureAtlas("gui/gui.pack");
@@ -89,15 +92,15 @@ public class JoinGameScreen implements Screen{
 				buttonStyle.down = skin.getDrawable("button1-down");
 				buttonStyle.font = font60;
 				
-				testButton = new TextButton("Join Game", buttonStyle);
-				testButton.setHeight(100f);
-				testButton.setWidth(500f);
-				testButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 2*Gdx.graphics.getHeight()/7.0f);
+				joinButton = new TextButton("Join Game", buttonStyle);
+				joinButton.setHeight(100f);
+				joinButton.setWidth(500f);
+				joinButton.setPosition(Gdx.graphics.getWidth()/2.0f - joinButton.getWidth()/2, 1.5f*Gdx.graphics.getHeight()/9.0f);
 				
 				menuButton = new TextButton("Main Menu", buttonStyle);
 				menuButton.setHeight(100f);
 				menuButton.setWidth(500f);
-				menuButton.setPosition(Gdx.graphics.getWidth()/2.0f - testButton.getWidth()/2, 1*Gdx.graphics.getHeight()/7.0f);
+				menuButton.setPosition(Gdx.graphics.getWidth()/2.0f - joinButton.getWidth()/2, 0f*Gdx.graphics.getHeight()/9.0f);
 				
 				//TextField
 				white36nonoFont = new BitmapFont(Gdx.files.internal("fonts/white36mono.fnt"));
@@ -106,34 +109,33 @@ public class JoinGameScreen implements Screen{
 				tfs.cursor = skin.getDrawable("cursor");
 				tfs.background = skin.getDrawable("textField");
 				tfs.fontColor = Color.WHITE;
-				textField = new TextField("localhost", tfs);
-				textField.setHeight(50);
-				textField.setWidth(300);
-				textField.setPosition(Gdx.graphics.getWidth()/2.0f - textField.getWidth()/2, 4*Gdx.graphics.getHeight()/7.0f);
+				inputAddress = new TextField("localhost", tfs);
+				inputAddress.setHeight(50);
+				inputAddress.setWidth(300);
+				inputAddress.setPosition(Gdx.graphics.getWidth()/2.0f - inputAddress.getWidth()/2, 5*Gdx.graphics.getHeight()/9.0f);
 
 				
 				//add actors
-				stage.addActor(testButton);
+				stage.addActor(joinButton);
 				stage.addActor(menuButton);
-				stage.addActor(textField);
+				stage.addActor(inputAddress);
+				stage.addActor(titleLabel);
+				stage.addActor(usernameLabel);
+				stage.addActor(usernameInput);
 				stage.addActor(titleLabel);
 				stage.addActor(label1);
-				stage.addActor(message);
-				
+								
 
-				testButton.addListener(new ChangeListener() {
+				joinButton.addListener(new ChangeListener() {
 					
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
-						System.out.println(textField.getText());
+						System.out.println(inputAddress.getText());
 						
-						GameScreen.createInstance(game,false,textField.getText());
+						GameScreen.createInstance(game,false,inputAddress.getText(),usernameInput.getText());
 						game.setScreen(GameScreen.getInstance());
 //						game.initInputListeners();
 						
-						String msg = "";
-						message.setPosition(Gdx.graphics.getWidth()/2.0f - message.getWidth()*msg.length()/2.0f, 1* Gdx.graphics.getHeight()/7.0f);
-						message.setText(msg);
 					}
 				});
 				

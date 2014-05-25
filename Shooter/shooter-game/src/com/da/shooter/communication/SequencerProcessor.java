@@ -58,11 +58,11 @@ public class SequencerProcessor extends Thread {
 					System.out.println("[SEQ][Out][Multicast]: Order assigned "+(Integer)msg.getNumber()+ "| "+msg.getMessageTypeName());
 				}
 			}catch(EOFException ex){
-				System.out.println("[SEQ][Error]: Player disconnected or network faillure.");
+				System.out.println("[SEQ][Error]["+socket.getInetAddress().getHostAddress()+"]: Player disconnected or network faillure.");
 				this.status = STATUS_STOP;
 //				ex.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("[SEQ][Error]: Player disconnected or network faillure.");
+				System.out.println("[SEQ][Error]["+socket.getInetAddress().getHostAddress()+"]: Player disconnected or network faillure.");
 				this.status = STATUS_STOP;
 //				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

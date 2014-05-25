@@ -2,19 +2,23 @@ package com.da.shooter.elements;
 
 import java.io.Serializable;
 
+import com.da.shooter.communication.Player;
+
 public class Action implements Serializable {
 	
 	private static final long serialVersionUID = 5439287403890312005L;
 	
 	private int avatarId;
 	private int id;
+	private String username;
 	private String name;
 	
-	public Action(int avatarId, int id, String name) {
+	public Action(Player player, int id, String name) {
 		super();
-		this.avatarId = avatarId;
+		this.avatarId = player.getAvatarId();
 		this.id = id;
 		this.name = name;
+		this.username = player.getUsername();
 	}
 	public int getAvatarId() {
 		return avatarId;
@@ -33,6 +37,12 @@ public class Action implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 }

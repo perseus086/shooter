@@ -201,59 +201,6 @@ public class CommunicationManager extends Thread{
 		
 	}
 
-//	private void sendData() {
-//		List<Message> outMessages = new ArrayList<Message>();
-//		for (OutputMessageProcessor processor : outputProcessors) {
-//			Message msg = processor.process();
-//			if(msg != null){
-//				outMessages.add(msg);
-//			}
-//		}
-////		UdpMessage outMessage = new UdpMessage(UdpMessage.TYPE_PLAYER_DATA, CarGame.getInstance().getMyPlayer(), System.currentTimeMillis(),CarGame.getInstance().getGameId());
-////		outMessage.setAddress(this.peerAddress);
-//		UdpMessageUtils.sendMessages(outMessages);
-//
-//	}
-	
-	private boolean receiveData(){
-		
-//		Message inMessage = UdpMessageUtils.receiveMessage((creator)?this.creatorPort:this.playerPort, MESSAGE_LENGTH, 20);
-//		if(inMessage == null) return false; // No new message
-//		if(this.inputProcessors.containsKey(inMessage.getType())){
-//			this.inputProcessors.get(inMessage.getType()).addMessage(inMessage);
-//			return true;
-//		}
-		
-//		if(!CarGame.getInstance().getGameId().equals(inMessage.getGameId())) return false; // Message from other game
-//		if(inMessage.getTime() <= this.lastReceivedPlayerTime) return true; // Ignore old packet
-//		this.lastReceivedPlayerTime = inMessage.getTime(); 
-//		
-//		if(this.server && this.peerAddress == null){
-//			this.peerAddress = inMessage.getAddress();
-//			System.out.println("Client address:"+this.peerAddress.getHostAddress());
-//		}
-//		
-//		switch(inMessage.getType()){
-//			case UdpMessage.TYPE_PLAYER_DATA:
-//				Player receivedPlayer = (Player)inMessage.getData();
-//				if(receivedPlayer != null){
-//					syncPlayerInfo(receivedPlayer);
-//				}
-//			break;
-//		}
-		return false;
-	}
-	
-//	public void addInputProcessor(int messageType,InputMessageProcessor inputProcessor){
-//		this.inputProcessors.put(messageType, inputProcessor);
-//		inputProcessor.start();
-//	}
-//	
-//	public void addOutputProcessor(OutputMessageProcessor outputProcessor){
-//		this.outputProcessors.add(outputProcessor);
-//		outputProcessor.start();
-//	}
-	
 	private InetAddress getInetAddress(String url){
 		try {
 			return InetAddress.getByName(url);
@@ -281,7 +228,7 @@ public class CommunicationManager extends Thread{
 			
 		} catch (Exception e1) {
 			System.err.println("[Client][Error]: Senquencer can not be reached.");
-//			e1.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 	
