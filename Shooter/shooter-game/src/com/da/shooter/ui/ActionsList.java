@@ -35,7 +35,7 @@ public class ActionsList {
 	public void update(){
 		for (int i = 0; i < limit; i++) {
 			if(actions.size() > i){
-				labels.get(i).setText(actions.get(i).getUsername()+":"+ actions.get(i).getName());
+				labels.get(i).setText("[P"+actions.get(i).getAvatarId()+"]"+actions.get(i).getUsername()+": "+ actions.get(i).getName());
 			}else{
 				labels.get(i).setText("");
 			}
