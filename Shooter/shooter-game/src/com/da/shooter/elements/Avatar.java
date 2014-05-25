@@ -243,8 +243,12 @@ public class Avatar implements Element,Comparable<Avatar>{
 		spriteBatch.draw(region,x,y,region.getRegionWidth()*ratio,region.getRegionHeight()*ratio);
 		
 		// Life
-		if(this.life > 50){
-			getLifeFont().setColor(0,1,0,1);
+		if(this.life > 30){
+			if(this.life > 60){
+				getLifeFont().setColor(0,1,0,1);
+			}else{
+				getLifeFont().setColor(1,1,0,1);
+			}
 		}else{
 			getLifeFont().setColor(1,0,0,1);
 		}
