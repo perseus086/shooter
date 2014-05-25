@@ -259,7 +259,7 @@ public class GameScreen implements Screen {
 		
 		for (Avatar avatar : this.getAvatars().values()) {
 			if(avatar.getPlayer() != null && avatar.getPlayer().getStatus() == Player.Status.GAME_OVER){
-				avatar.getBody().setTransform(new Vector2(1000, 1000), 0);
+				avatar.getBody().setTransform(new Vector2(avatar.getPlayer().getAvatarId()*1000, 1000), 0);
 			}
 		}
 		
